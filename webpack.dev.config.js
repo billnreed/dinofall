@@ -21,9 +21,6 @@ module.exports = {
     new webpack.DefinePlugin({
       'DEBUG': true,
     }),
-    new CleanWebpackPlugin([
-      path.join(__dirname, 'dist')
-    ]),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'templates/index.ejs')
     })
