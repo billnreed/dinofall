@@ -2,7 +2,8 @@
   "name": "webpack-typescript-phaser-starter",
   "version": "1.0.0",
   "scripts": {
-    "dev": "webpack-dev-server --config webpack.dev.config.js --open"
+    "dev": "webpack-dev-server --config webpack.dev.config.js --open",
+    "build:dev": "webpack --config webpack.dev.config.js"
   },
   "devDependencies": {
     "@types/node": "7.0.13",
