@@ -11,7 +11,7 @@
     "expose-loader": "0.7.3",
     "html-webpack-plugin": "2.28.0",
     "npm-check": "5.4.0",
-    "phaser-ce": "2.7.7",
+    "phaser-ce": "^2.7.7",
     "ts-loader": "2.0.3",
     "tslint": "5.1.0",
     "tslint-loader": "3.5.2",
