@@ -4,14 +4,19 @@ module.exports = function(config) {
   config.set({
     basePath: '',
     frameworks: ['mocha', 'chai'],
-    files: ['test/*.ts'],
+    files: ['./test/test_index.ts'],
     exclude: [],
     preprocessors: {
-      'test/**/*.ts': ['webpack']
+      './test/test_index.ts': ['webpack']
     },
     webpack: {
+      // entry: {},
+      entry: './test/test_index.ts',
       module: webpackConfig.module,
-      resolve: webpackConfig.resolve,
+      resolve: webpackConfig.resolve
+    },
+    webpackMiddleware: {
+      stats: 'errors-only'
     },
     reporters: ['mocha'],
     port: 9876,
