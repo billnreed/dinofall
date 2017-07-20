@@ -9,7 +9,9 @@
   "devDependencies": {
     "@types/chai": "^4.0.0",
     "@types/mocha": "^2.2.41",
-    "@types/node": "^8.0.0",
+    "@types/node": "^8.0.14",
+    "@types/webpack": "^3.0.4",
+    "@types/webpack-env": "^1.13.0",
     "chai": "^4.0.0",
     "expose-loader": "^0.7.3",
     "html-webpack-plugin": "^2.29.0",
