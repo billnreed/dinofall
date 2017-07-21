@@ -9,7 +9,6 @@ function startApp(): void {
     height: gameHeight,
     renderer: Phaser.AUTO,
     parent: 'game-container',
-    resolution: 1
   };
 
   new Game(gameConfig);
