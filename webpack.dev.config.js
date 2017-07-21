@@ -37,11 +37,31 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.ts$/, enforce: 'pre', loader: 'tslint-loader' },
-      { test: /pixi\.js$/, loader: 'expose-loader?PIXI' },
-      { test: /phaser-split\.js$/, loader: 'expose-loader?Phaser' },
-      { test: /p2\.js$/, loader: 'expose-loader?p2' },
-      { test: /\.ts$/, loader: 'ts-loader', exclude: '/node_modules/' }
+      {
+        enforce: 'pre',
+        test: /\.ts$/,
+        loader: 'tslint-loader'
+      },
+      {
+        include: path.resolve(__dirname, 'node_modules/phaser-ce/build/custom/pixi.js'),
+        loader: 'expose-loader',
+        options: 'PIXI'
+      },
+      {
+        include: path.resolve(__dirname, 'node_modules/phaser-ce/build/custom/phaser-split.js'),
+        loader: 'expose-loader',
+        options: 'Phaser'
+      },
+      {
+        include: path.resolve(__dirname, 'node_modules/phaser-ce/build/custom/p2.js'),
+        loader: 'expose-loader',
+        options: 'p2'
+      },
+      {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        exclude: '/node_modules/'
+      }
     ]
   },
   devtool: 'source-map'
