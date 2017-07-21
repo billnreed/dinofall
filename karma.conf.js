@@ -10,7 +10,6 @@ module.exports = function(config) {
       './test/test_index.ts': ['webpack']
     },
     webpack: {
-      // entry: {},
       entry: './test/test_index.ts',
       module: webpackConfig.module,
       resolve: webpackConfig.resolve

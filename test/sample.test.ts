@@ -1,4 +1,3 @@
-// import 'mocha';
 import { expect } from 'chai';
 
 import { add } from '../src/util/sample';

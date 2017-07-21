@@ -8,12 +8,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "files": [
-    "./src/globals.d.ts",
-    "./node_modules/phaser-ce/typescript/phaser.comments.d.ts",
-    "./src/app.ts"
-  ],
-  "exclude": [
-    "node_modules"
+  "include": [
+    "node_modules/phaser-ce/typescript/phaser.comments.d.ts",
+    "node_modules/@types/**/*.d.ts",
+    "src/app.ts"
   ]
 }
