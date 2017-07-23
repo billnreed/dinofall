@@ -25,7 +25,18 @@ module.exports = {
     })
   ],
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: [
+      path.join(__dirname, 'dist'),
+      path.join(__dirname, 'assets'),
+    ],
+    setup: app => {
+      app.get(/^\/assets\/.*/, (req, res, next) => {
+        // We want to request assets using their full path in the code, but serve them from the `assets` directory.
+        // So webpack-dev-server needs to get rid of the `assets` part of that path since that's one of the content bases.
+        req.url = req.url.replace(/^\/assets/, "");
+        next();
+      });
+    },
     compress: true,
     port: 9000,
     inline: true,
