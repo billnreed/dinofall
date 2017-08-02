@@ -11,8 +11,6 @@ export class Floor extends Phaser.Group {
   }
 
   public initPhysics(): void {
-    this.forEach((child: Phaser.Sprite) => {
-      child.body.immovable = true;
-    }, null);
+    this.setAll('body.immovable', true);
   }
 }
