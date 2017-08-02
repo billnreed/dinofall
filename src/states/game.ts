@@ -16,6 +16,7 @@ export class GameState extends Phaser.State {
     this.positionEntities();
     this.addEntities();
     this.enablePhysics();
+    this.enableInput();
   }
 
   public update(): void {
@@ -36,7 +37,7 @@ export class GameState extends Phaser.State {
     this.entities.floor.centerX = this.world.centerX;
     this.entities.floor.centerY = this.world.centerY;
 
-    this.entities.dinosaur.centerX = this.world.centerX;
+    this.entities.dinosaur.centerX = this.world.width - 200;
     this.entities.dinosaur.centerY = this.world.centerY - 200;
   }
 
@@ -51,6 +52,15 @@ export class GameState extends Phaser.State {
     this.physics.enable(this.entities.dinosaur);
 
     this.entities.floor.initPhysics();
-    this.entities.dinosaur.initPhysics();
+  }
+
+  private enableInput(): void {
+    this.input.onDown.add(() => {
+      if (this.input.activePointer.x < this.world.centerX) {
+        this.entities.dinosaur.goLeft();
+      } else {
+        this.entities.dinosaur.goRight();
+      }
+    });
   }
 }

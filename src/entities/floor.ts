@@ -6,6 +6,8 @@ export class Floor extends Phaser.Group {
     const necessaryTiles = Math.ceil(this.game.width / tileWidth);
     this.createMultiple(necessaryTiles, 'ground', 0, true);
     this.align(-1, 1, 64, 64);
+
+    this.removeBetween(this.length / 2 - 1, this.length / 2 + 1, true);
   }
 
   public initPhysics(): void {

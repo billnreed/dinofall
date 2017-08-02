@@ -8,7 +8,17 @@ export class Dinosaur extends Phaser.Sprite {
     this.width = 93;
   }
 
-  public initPhysics(): void {
-    this.body.gravity.y = 1000;
+  public update(): void {
+    if (!this.body.blocked.down) {
+      this.body.velocity.y = 500;
+    }
+  }
+
+  public goLeft():void {
+    this.body.velocity.x = -500;
+  }
+
+  public goRight():void {
+    this.body.velocity.x = 500;
   }
 }
