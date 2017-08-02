@@ -1,6 +1,7 @@
 import { GameStateEntities } from '../types/game-state-entities';
 
 import { Floor } from '../entities/floor';
+// import { Floors } from '../entities/floors';
 import { Dinosaur } from '../entities/dinosaur';
 
 export class GameState extends Phaser.State {
@@ -20,38 +21,46 @@ export class GameState extends Phaser.State {
   }
 
   public update(): void {
-    this.physics.arcade.collide(this.entities.floor, this.entities.dinosaur);
+    this.physics.arcade.collide(this.entities.floor1, this.entities.dinosaur);
+    this.physics.arcade.collide(this.entities.floor2, this.entities.dinosaur);
   }
 
   private createEntities(): GameStateEntities {
-    const floor: Floor = new Floor(this.game);
+    const floor1: Floor = new Floor(this.game);
+    const floor2: Floor = new Floor(this.game, { start: 0.1, end: 0.3 });
     const dinosaur: Dinosaur = new Dinosaur(this.game);
 
     return {
-      floor,
+      floor1: floor1,
+      floor2: floor2,
       dinosaur,
     };
   }
 
   private positionEntities(): void {
-    this.entities.floor.centerX = this.world.centerX;
-    this.entities.floor.centerY = this.world.centerY;
+    this.entities.floor1.centerX = this.world.centerX;
+    this.entities.floor1.centerY = this.world.centerY;
+    this.entities.floor2.centerX = this.world.centerX;
+    this.entities.floor2.centerY = this.world.centerY + 300;
 
     this.entities.dinosaur.centerX = this.world.width - 200;
     this.entities.dinosaur.centerY = this.world.centerY - 200;
   }
 
   private addEntities(): void {
-    this.game.add.existing(this.entities.floor);
+    this.game.add.existing(this.entities.floor1);
+    this.game.add.existing(this.entities.floor2);
     this.game.add.existing(this.entities.dinosaur);
   }
 
   private enablePhysics(): void {
     this.physics.startSystem(Phaser.Physics.ARCADE);
-    this.physics.enable(this.entities.floor);
+    this.physics.enable(this.entities.floor1);
+    this.physics.enable(this.entities.floor2);
     this.physics.enable(this.entities.dinosaur);
 
-    this.entities.floor.initPhysics();
+    this.entities.floor1.initPhysics();
+    this.entities.floor2.initPhysics();
   }
 
   private enableInput(): void {
