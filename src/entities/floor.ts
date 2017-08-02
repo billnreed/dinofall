@@ -7,4 +7,10 @@ export class Floor extends Phaser.Group {
     this.createMultiple(necessaryTiles, 'ground', 0, true);
     this.align(-1, 1, 64, 64);
   }
+
+  public initPhysics(): void {
+    this.forEach((child: Phaser.Sprite) => {
+      child.body.immovable = true;
+    }, null);
+  }
 }
