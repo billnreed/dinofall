@@ -1,8 +1,10 @@
+import { GameStateEntities } from '../types/game-state-entities';
+
 import { Floor } from '../entities/floor';
 import { Dinosaur } from '../entities/dinosaur';
 
 export class GameState extends Phaser.State {
-  private entities: any = {};
+  private entities: GameStateEntities;
 
   public preload(): void {
     this.game.load.image('ground', 'assets/abstract-platformer/PNG/Tiles/Brown tiles/tileBrown_02.png');
@@ -20,7 +22,7 @@ export class GameState extends Phaser.State {
     this.physics.arcade.collide(this.entities.floor, this.entities.dinosaur);
   }
 
-  private createEntities(): any {
+  private createEntities(): GameStateEntities {
     const floor: Floor = new Floor(this.game);
     const dinosaur: Dinosaur = new Dinosaur(this.game);
 

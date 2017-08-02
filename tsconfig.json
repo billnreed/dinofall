@@ -10,7 +10,7 @@
   },
   "include": [
     "node_modules/phaser-ce/typescript/phaser.comments.d.ts",
-    "src/types/*.d.ts",
+    "src/types/**/*.d.ts",
     "src/app.ts"
   ]
 }
