@@ -9,6 +9,6 @@ export class Dinosaur extends Phaser.Sprite {
   }
 
   public initPhysics(): void {
-    this.body.gravity.y = 50;
+    this.body.gravity.y = 1000;
   }
 }

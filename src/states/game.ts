@@ -8,7 +8,7 @@ export class GameState extends Phaser.State {
 
   public preload(): void {
     this.game.load.image('ground', 'assets/abstract-platformer/PNG/Tiles/Brown tiles/tileBrown_02.png');
-    this.game.load.image('dinosaur', 'assets/characters/dinosaur.png');
+    this.game.load.spritesheet('dinosaur', 'assets/characters/dinosaur-spritesheet.png', 93, 128);
   }
 
   public create(): void {
@@ -47,10 +47,10 @@ export class GameState extends Phaser.State {
 
   private enablePhysics(): void {
     this.physics.startSystem(Phaser.Physics.ARCADE);
-    this.physics.enable(this.entities.dinosaur);
     this.physics.enable(this.entities.floor);
+    this.physics.enable(this.entities.dinosaur);
 
-    this.entities.dinosaur.initPhysics();
     this.entities.floor.initPhysics();
+    this.entities.dinosaur.initPhysics();
   }
 }
