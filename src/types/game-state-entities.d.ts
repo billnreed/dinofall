@@ -1,8 +1,7 @@
-import { Floor } from "../entities/floor";
+import { Floors } from "../entities/floors";
 import { Dinosaur } from "../entities/dinosaur";
 
 interface GameStateEntities {
-  floor1: Floor,
-  floor2: Floor,
+  floors: Floors,
   dinosaur: Dinosaur
 }

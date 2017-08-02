@@ -1,7 +1,7 @@
 import { GameStateEntities } from '../types/game-state-entities';
 
 import { Floor } from '../entities/floor';
-// import { Floors } from '../entities/floors';
+import { Floors } from '../entities/floors';
 import { Dinosaur } from '../entities/dinosaur';
 
 export class GameState extends Phaser.State {
@@ -14,53 +14,60 @@ export class GameState extends Phaser.State {
 
   public create(): void {
     this.entities = this.createEntities();
-    this.positionEntities();
     this.addEntities();
+    this.positionEntities();
     this.enablePhysics();
     this.enableInput();
   }
 
   public update(): void {
-    this.physics.arcade.collide(this.entities.floor1, this.entities.dinosaur);
-    this.physics.arcade.collide(this.entities.floor2, this.entities.dinosaur);
+    this.entities.floors.forEach((floor: Floor) => {
+      this.physics.arcade.collide(floor, this.entities.dinosaur);
+    }, null);
   }
 
   private createEntities(): GameStateEntities {
     const floor1: Floor = new Floor(this.game);
     const floor2: Floor = new Floor(this.game, { start: 0.1, end: 0.3 });
+    const floors: Floors = new Floors(this.game);
+    floors.add(floor1);
+    floors.add(floor2);
+
     const dinosaur: Dinosaur = new Dinosaur(this.game);
 
     return {
-      floor1: floor1,
-      floor2: floor2,
+      floors,
       dinosaur,
     };
   }
 
+  private addEntities(): void {
+    this.game.add.existing(this.entities.floors);
+    this.game.add.existing(this.entities.dinosaur);
+  }
+
   private positionEntities(): void {
-    this.entities.floor1.centerX = this.world.centerX;
-    this.entities.floor1.centerY = this.world.centerY;
-    this.entities.floor2.centerX = this.world.centerX;
-    this.entities.floor2.centerY = this.world.centerY + 300;
+    const floor1: Floor = this.entities.floors.getChildAt(0) as Floor;
+    floor1.centerX = this.world.centerX;
+    floor1.centerY = this.world.centerY;
+
+    const floor2: Floor = this.entities.floors.getChildAt(1) as Floor;
+    floor2.centerX = this.world.centerX;
+    floor2.centerY = this.world.centerY + 300;
 
     this.entities.dinosaur.centerX = this.world.width - 200;
     this.entities.dinosaur.centerY = this.world.centerY - 200;
   }
 
-  private addEntities(): void {
-    this.game.add.existing(this.entities.floor1);
-    this.game.add.existing(this.entities.floor2);
-    this.game.add.existing(this.entities.dinosaur);
-  }
-
   private enablePhysics(): void {
     this.physics.startSystem(Phaser.Physics.ARCADE);
-    this.physics.enable(this.entities.floor1);
-    this.physics.enable(this.entities.floor2);
-    this.physics.enable(this.entities.dinosaur);
 
-    this.entities.floor1.initPhysics();
-    this.entities.floor2.initPhysics();
+    this.entities.floors.forEach((floor: Floor) => {
+      this.physics.enable(floor);
+      floor.initPhysics();
+    }, this);
+
+    this.physics.enable(this.entities.dinosaur);
   }
 
   private enableInput(): void {
