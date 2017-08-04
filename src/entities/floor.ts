@@ -15,4 +15,8 @@ export class Floor extends Phaser.Group {
   public initPhysics(): void {
     this.setAll('body.immovable', true);
   }
+
+  public startMovement(): void {
+    this.setAll('body.velocity.y', -100);
+  }
 }

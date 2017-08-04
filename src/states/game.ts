@@ -14,10 +14,14 @@ export class GameState extends Phaser.State {
 
   public create(): void {
     this.entities = this.createEntities();
+
     this.addEntities();
     this.positionEntities();
+
     this.enablePhysics();
     this.enableInput();
+
+    this.startMovement();
   }
 
   public update(): void {
@@ -78,5 +82,9 @@ export class GameState extends Phaser.State {
         this.entities.dinosaur.goRight();
       }
     });
+  }
+
+  private startMovement(): void {
+    this.entities.floors.startMovement();
   }
 }
