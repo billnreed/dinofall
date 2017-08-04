@@ -31,11 +31,13 @@ export class GameState extends Phaser.State {
   }
 
   private createEntities(): GameStateEntities {
-    const floor1: Floor = new Floor(this.game);
-    const floor2: Floor = new Floor(this.game, { start: 0.1, end: 0.3 });
+    // const floor1: Floor = new Floor(this.game);
+    // const floor2: Floor = new Floor(this.game, { start: 0.1, end: 0.3 });
+    // const floors: Floors = new Floors(this.game);
+    // floors.add(floor1);
+    // floors.add(floor2);
     const floors: Floors = new Floors(this.game);
-    floors.add(floor1);
-    floors.add(floor2);
+    floors.createEntities();
 
     const dinosaur: Dinosaur = new Dinosaur(this.game);
 
@@ -51,13 +53,14 @@ export class GameState extends Phaser.State {
   }
 
   private positionEntities(): void {
-    const floor1: Floor = this.entities.floors.getChildAt(0) as Floor;
-    floor1.centerX = this.world.centerX;
-    floor1.centerY = this.world.centerY;
-
-    const floor2: Floor = this.entities.floors.getChildAt(1) as Floor;
-    floor2.centerX = this.world.centerX;
-    floor2.centerY = this.world.centerY + 300;
+    // const floor1: Floor = this.entities.floors.getChildAt(0) as Floor;
+    // floor1.centerX = this.world.centerX;
+    // floor1.centerY = this.world.centerY;
+//
+    // const floor2: Floor = this.entities.floors.getChildAt(1) as Floor;
+    // floor2.centerX = this.world.centerX;
+    // floor2.centerY = this.world.centerY + 300;
+    this.entities.floors.positionEntities();
 
     this.entities.dinosaur.centerX = this.world.width - 200;
     this.entities.dinosaur.centerY = this.world.centerY - 200;
