@@ -1,4 +1,13 @@
 export class Floor extends Phaser.Group {
+
+  public static HEIGHT: number = 64;
+
+  public static newWithRandomGap(game: Phaser.Game, width = 0.2): Floor {
+    const start: number = game.rnd.realInRange(0.1, 0.9 - width);
+    const end: number = start + width;
+    return new Floor(game, { start, end });
+  }
+
   constructor(game: Phaser.Game, emptyZone = { start: 0.5, end: 0.7}) {
     super(game);
 
