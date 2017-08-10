@@ -1,28 +1,29 @@
 import { Floor } from '../entities/floor';
 
-export class Floors extends Phaser.Group {
+export class FloorPool extends Phaser.Group {
   constructor(game: Phaser.Game) {
     super(game);
   }
 
-  public createEntities(): void {
+  public createFloors(): void {
     const spaceBetweenFloors: number = this.game.world.height * 0.2;
 
     const numberOfFloors: number = Math.floor(this.game.world.height / (Floor.HEIGHT + spaceBetweenFloors));
     for (let i = 0; i < numberOfFloors; i++) {
-      const floor: Floor = Floor.newWithRandomGap(this.game);
-      this.add(floor);
+      this.add(new Floor(this.game));
     }
+
+    this.forEach((floor: Floor) => {
+      floor.onExitWorld.add(this.recycleFloor, this);
+    }, this);
   }
 
-  public positionEntities(): void {
+  public initiallyPositionFloors(): void {
     const floorSpacing: number = this.game.world.height / this.length;
 
     let index = 0;
     this.forEach((floor: Floor) => {
-      floor.centerX = this.game.world.centerX;
-      floor.centerY = index * floorSpacing;
-      index++;
+      floor.initiallyPositionAt(this.game.world.centerX, (index++ * floorSpacing) + Floor.HEIGHT);
     }, this);
   }
 
@@ -30,5 +31,10 @@ export class Floors extends Phaser.Group {
     this.forEach((floor: Floor) => {
       floor.startMovement();
     }, this);
+  }
+
+  private recycleFloor(floor: Floor): void {
+    floor.recycle();
+    floor.reuse();
   }
 }

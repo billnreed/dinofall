@@ -1,7 +1,7 @@
-import { Floors } from "../entities/floors";
+import { FloorPool } from "../pools/floor-pool";
 import { Dinosaur } from "../entities/dinosaur";
 
 export interface GameStateEntities {
-  floors: Floors,
+  floorPool: FloorPool,
   dinosaur: Dinosaur
 }

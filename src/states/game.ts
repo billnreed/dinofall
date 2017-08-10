@@ -1,7 +1,7 @@
 import { GameStateEntities } from '../types/game-state-entities';
 
 import { Floor } from '../entities/floor';
-import { Floors } from '../entities/floors';
+import { FloorPool } from '../pools/floor-pool';
 import { Dinosaur } from '../entities/dinosaur';
 
 export class GameState extends Phaser.State {
@@ -25,29 +25,29 @@ export class GameState extends Phaser.State {
   }
 
   public update(): void {
-    this.entities.floors.forEach((floor: Floor) => {
+    this.entities.floorPool.forEach((floor: Floor) => {
       this.physics.arcade.collide(floor, this.entities.dinosaur);
     }, null);
   }
 
   private createEntities(): GameStateEntities {
     const dinosaur: Dinosaur = new Dinosaur(this.game);
-    const floors: Floors = new Floors(this.game);
-    floors.createEntities();
+    const floorPool: FloorPool = new FloorPool(this.game);
+    floorPool.createFloors();
 
     return {
       dinosaur,
-      floors,
+      floorPool,
     };
   }
 
   private addEntities(): void {
-    this.game.add.existing(this.entities.floors);
+    this.game.add.existing(this.entities.floorPool);
     this.game.add.existing(this.entities.dinosaur);
   }
 
   private positionEntities(): void {
-    this.entities.floors.positionEntities();
+    this.entities.floorPool.initiallyPositionFloors();
 
     this.entities.dinosaur.centerX = this.world.width - 200;
     this.entities.dinosaur.centerY = this.world.centerY - 200;
@@ -56,7 +56,7 @@ export class GameState extends Phaser.State {
   private enablePhysics(): void {
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.entities.floors.forEach((floor: Floor) => {
+    this.entities.floorPool.forEach((floor: Floor) => {
       this.physics.enable(floor);
       floor.initPhysics();
     }, this);
@@ -75,6 +75,6 @@ export class GameState extends Phaser.State {
   }
 
   private startMovement(): void {
-    // this.entities.floors.startMovement();
+    this.entities.floorPool.startMovement();
   }
 }
