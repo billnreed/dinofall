@@ -1,6 +1,7 @@
 export class Floor extends Phaser.Group {
 
   public static HEIGHT: number = 64;
+  public static TILE_WIDTH: number = 64;
 
   public onExitWorld: Phaser.Signal;
   public body: Phaser.Physics.Arcade.Body;
@@ -14,10 +15,6 @@ export class Floor extends Phaser.Group {
     const necessaryTiles = Math.ceil(this.game.width / tileWidth);
     this.createMultiple(necessaryTiles, 'ground', 0, true);
     this.align(-1, 1, 64, 64);
-
-    // const startIndex: number = Math.floor((this.game.world.width * emptyZone.start) / tileWidth);
-    // const endIndex: number = Math.floor((this.game.world.width * emptyZone.end) / tileWidth);
-    // this.removeBetween(startIndex, endIndex, true);
   }
 
   public update(): void {
@@ -49,7 +46,24 @@ export class Floor extends Phaser.Group {
   public reuse(): void {
     this.setAll('visible', true);
     this.setAll('exists', true);
+    this.setRandomGap();
 
     this.setAll('body.y', this.game.world.height);
+  }
+
+  private setRandomGap(): void {
+    const width = 0.2;
+    const start = this.game.rnd.integerInRange(1, 7) / 10;
+    const end = start + width;
+
+    const startIndex: number = Math.floor((this.game.world.width * start) / Floor.TILE_WIDTH);
+    const endIndex: number = Math.floor((this.game.world.width * end) / Floor.TILE_WIDTH);
+
+    this.filter((floorTile: Phaser.Sprite, index: number) => {
+      if (index >= startIndex && index <= endIndex) {
+        floorTile.visible = false;
+        floorTile.exists = false;
+      }
+    });
   }
 }

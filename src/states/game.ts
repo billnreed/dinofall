@@ -16,9 +16,8 @@ export class GameState extends Phaser.State {
     this.entities = this.createEntities();
 
     this.addEntities();
-    this.positionEntities();
-
     this.enablePhysics();
+    this.positionEntities();
     this.enableInput();
 
     this.startMovement();
