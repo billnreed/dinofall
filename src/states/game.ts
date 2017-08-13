@@ -28,6 +28,8 @@ export class GameState extends Phaser.State {
     this.positionEntities();
 
     this.enableInput();
+
+    this.start();
   }
 
   public update(): void {
@@ -45,7 +47,7 @@ export class GameState extends Phaser.State {
   }
 
   private createSpawners(): GameStateSpawners {
-    const floorSpawner: FloorSpawner = new FloorSpawner(this.pools.floorPool);
+    const floorSpawner: FloorSpawner = new FloorSpawner(this.game, this.pools.floorPool);
 
     return {
       floorSpawner,
@@ -88,5 +90,9 @@ export class GameState extends Phaser.State {
         this.entities.dinosaur.goRight();
       }
     });
+  }
+
+  private start(): void {
+    this.spawners.floorSpawner.start();
   }
 }

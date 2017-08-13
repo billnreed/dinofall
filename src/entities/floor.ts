@@ -17,7 +17,6 @@ export class Floor extends Phaser.Group {
     this.createMultiple(necessaryTiles, 'ground', 0, true);
     this.align(-1, 1, 64, 64);
 
-    this.setAll('visible', false);
     this.setAll('exists', false);
   }
 
@@ -36,16 +35,14 @@ export class Floor extends Phaser.Group {
   }
 
   public recycle(): void {
-    this.setAll('visible', false);
     this.setAll('exists', false);
   }
 
   public reuse(): void {
-    this.setAll('visible', true);
     this.setAll('exists', true);
     this.setRandomGap();
 
-    this.setAll('body.y', this.game.world.height);
+    // this.setAll('body.y', this.game.world.height);
     this.y = this.game.world.height;
   }
 
@@ -54,6 +51,7 @@ export class Floor extends Phaser.Group {
   }
 
   private setRandomGap(): void {
+    /*
     const width = 0.2;
     const start = this.game.rnd.integerInRange(1, 7) / 10;
     const end = start + width;
@@ -67,5 +65,6 @@ export class Floor extends Phaser.Group {
         floorTile.exists = false;
       }
     });
+    */
   }
 }

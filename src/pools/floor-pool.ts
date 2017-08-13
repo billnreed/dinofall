@@ -31,7 +31,7 @@ export class FloorPool extends Phaser.Group {
     floor.recycle();
   }
 
-  public getFirstNotExists(): Floor {
+  public getFirstAvailable(): Floor {
     const notExistingFloors = this.filter((floor: Floor) => floor.doesNotExist(), false);
     if (notExistingFloors.total === 0) {
       throw 'All floors exist, therefore they are all being used';
