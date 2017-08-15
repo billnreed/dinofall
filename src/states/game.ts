@@ -65,8 +65,11 @@ export class GameState extends Phaser.State {
 
   private enablePhysics(): void {
     this.physics.startSystem(Phaser.Physics.ARCADE);
+    this.physics.arcade.checkCollision.down = false;
 
     this.physics.enable(this.entities.dinosaur);
+    this.entities.dinosaur.initPhysics();
+
     this.pools.floorPool.enablePhysics();
   }
 
