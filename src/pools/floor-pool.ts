@@ -11,7 +11,6 @@ export class FloorPool extends Phaser.Group {
   public createFloors(): void {
     for (let i = 0; i < FloorPool.POOL_SIZE; i++) {
       const floor = new Floor(this.game);
-      floor.recycle();
       this.add(floor);
     }
 

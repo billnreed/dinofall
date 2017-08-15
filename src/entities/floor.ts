@@ -42,7 +42,7 @@ export class Floor extends Phaser.Group {
     this.setAll('exists', true);
     this.setRandomGap();
 
-    // this.setAll('body.y', this.game.world.height);
+    this.setAll('y', 0);
     this.y = this.game.world.height;
   }
 
@@ -51,7 +51,6 @@ export class Floor extends Phaser.Group {
   }
 
   private setRandomGap(): void {
-    /*
     const width = 0.2;
     const start = this.game.rnd.integerInRange(1, 7) / 10;
     const end = start + width;
@@ -65,6 +64,5 @@ export class Floor extends Phaser.Group {
         floorTile.exists = false;
       }
     });
-    */
   }
 }
