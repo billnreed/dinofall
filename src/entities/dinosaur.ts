@@ -30,10 +30,6 @@ export class Dinosaur extends Phaser.Sprite {
     }
   }
 
-  public initPhysics(): void {
-    this.body.collideWorldBounds = true;
-  }
-
   public goLeft():void {
     this.frame = this.FRAMES.FACE_LEFT;
     this.direction = Phaser.LEFT;
