@@ -44,7 +44,7 @@ export class GameState extends Phaser.State {
     this.physics.arcade.collide(this.entities.dinosaur, this.walls.left);
     this.physics.arcade.collide(this.entities.dinosaur, this.walls.right);
     this.physics.arcade.collide(this.entities.dinosaur, this.walls.top, () => {
-      console.log('lose');
+      this.game.state.start('title');
     });
   }
 
