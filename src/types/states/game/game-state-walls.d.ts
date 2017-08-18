@@ -1,4 +1,4 @@
-import { Wall } from "../entities/wall";
+import { Wall } from "../../../entities/wall";
 
 export interface GameStateWalls {
   left: Wall,

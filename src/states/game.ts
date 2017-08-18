@@ -1,7 +1,7 @@
-import { GameStateEntities } from '../types/game-state-entities';
-import { GameStateSpawners } from '../types/game-state-spawners';
-import { GameStatePools } from '../types/game-state-pools';
-import { GameStateWalls } from '../types/game-state-walls';
+import { GameStateEntities } from '../types/states/game/game-state-entities';
+import { GameStateSpawners } from '../types/states/game/game-state-spawners';
+import { GameStatePools } from '../types/states/game/game-state-pools';
+import { GameStateWalls } from '../types/states/game/game-state-walls';
 
 import { FloorSpawner } from '../spawners/floor-spawner';
 import { FloorPool } from '../pools/floor-pool';
