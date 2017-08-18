@@ -1,8 +1,7 @@
+import { GameConfig } from '../game-config';
 import { FloorPool } from '../pools/floor-pool';
 
 export class FloorSpawner {
-  private static SPAWN_DELAY = 5000;
-
   public onSpawn: Phaser.Signal;
 
   private spawnTimer: Phaser.Timer;
@@ -25,7 +24,7 @@ export class FloorSpawner {
   }
 
   start() {
-    this.spawnTimer.loop(FloorSpawner.SPAWN_DELAY, () => {
+    this.spawnTimer.loop(GameConfig.spawners.floor.delay, () => {
       const floor = this.floorPool.getFirstAvailable();
 
       floor.reuse();

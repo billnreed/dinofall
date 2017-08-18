@@ -1,3 +1,5 @@
+import { GameConfig } from '../game-config';
+
 export class Floor extends Phaser.Group {
 
   public static HEIGHT: number = 64;
@@ -5,8 +7,6 @@ export class Floor extends Phaser.Group {
 
   public onExitWorld: Phaser.Signal;
   public body: Phaser.Physics.Arcade.Body;
-
-  private movementSpeed: number = 100;
 
   constructor(game: Phaser.Game) {
     super(game);
@@ -31,7 +31,7 @@ export class Floor extends Phaser.Group {
   }
 
   public startMovement(): void {
-    this.setAll('body.velocity.y', -1 * this.movementSpeed);
+    this.setAll('body.velocity.y', -1 * GameConfig.entities.floor.moveSpeed);
   }
 
   public recycle(): void {

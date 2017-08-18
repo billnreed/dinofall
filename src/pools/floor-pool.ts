@@ -1,15 +1,14 @@
+import { GameConfig } from '../game-config';
 import { Floor } from '../entities/floor';
 
 export class FloorPool extends Phaser.Group {
-
-  private static POOL_SIZE = 10;
 
   constructor(game: Phaser.Game) {
     super(game);
   }
 
   public createFloors(): void {
-    for (let i = 0; i < FloorPool.POOL_SIZE; i++) {
+    for (let i = 0; i < GameConfig.pools.floor.size; i++) {
       const floor = new Floor(this.game);
       this.add(floor);
     }
@@ -38,23 +37,4 @@ export class FloorPool extends Phaser.Group {
       return notExistingFloors.first;
     }
   }
-
-  /*
-  public initiallyPositionFloors(): void {
-    const floorSpacing: number = this.game.world.height / this.length;
-
-    let index = 0;
-    this.forEach((floor: Floor) => {
-      floor.initiallyPositionAt(this.game.world.centerX, (index++ * floorSpacing) + Floor.HEIGHT);
-    }, this);
-  }
-  */
-
-  /*
-  public startMovement(): void {
-    this.forEach((floor: Floor) => {
-      floor.startMovement();
-    }, this);
-  }
-  */
 }
