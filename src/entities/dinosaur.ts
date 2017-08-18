@@ -1,4 +1,4 @@
-import { DinosaurFrames } from '../types/dinosaur-frames';
+import { DinosaurFrames } from '../types/entities/dinosaur/dinosaur-frames';
 
 export class Dinosaur extends Phaser.Sprite {
 
