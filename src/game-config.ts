@@ -1,11 +1,11 @@
 export const GameConfig = {
   entities: {
     dinosaur: {
-      moveSpeed: 500,
+      moveSpeed: 400,
       fallSpeed: 500,
     },
     floor: {
-      moveSpeed: 300,
+      moveSpeed: 400,
     }
   },
   pools: {
@@ -15,7 +15,7 @@ export const GameConfig = {
   },
   spawners: {
     floor: {
-      delay: 2000,
+      delay: 1500,
     }
   }
 };
