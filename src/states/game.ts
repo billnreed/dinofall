@@ -58,6 +58,20 @@ export class GameState extends Phaser.State {
     this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.top, () => {
       this.game.state.start('title');
     });
+    this.physics.arcade.overlap(this.entities.dinosaur, this.boundaries.bottom, () => {
+      console.log('hit the bottom');
+      // | stop collisions between dinosaur and platforms
+      // | stop dinosaur falling & moving to side
+      //  \
+      //   | tween dinosaur to top      |\
+      //   | scroll platforms real fast |-- these are all in a timed event together
+      //   | count depth real fast      |/
+      //  /
+      // | make platforms scroll at correct speed
+      // | make depth counter go at correct speed
+      // | reenable dinosaur falling & movement
+      // | reenable collisions between dinosaur and platforms
+    });
 
     this.gui.depthText.updateDepthValue();
   }
@@ -99,11 +113,13 @@ export class GameState extends Phaser.State {
     const left = new Boundary(this.game, Phaser.LEFT);
     const right = new Boundary(this.game, Phaser.RIGHT);
     const top = new Boundary(this.game, Phaser.UP);
+    const bottom = new Boundary(this.game, Phaser.DOWN);
 
     return {
       left,
       right,
       top,
+      bottom,
     };
   }
 
@@ -125,9 +141,11 @@ export class GameState extends Phaser.State {
     this.physics.enable(this.boundaries.left);
     this.physics.enable(this.boundaries.right);
     this.physics.enable(this.boundaries.top);
+    this.physics.enable(this.boundaries.bottom);
     this.boundaries.left.initPhysics();
     this.boundaries.right.initPhysics();
     this.boundaries.top.initPhysics();
+    this.boundaries.bottom.initPhysics();
   }
 
   private addEntities(): void {
@@ -136,6 +154,7 @@ export class GameState extends Phaser.State {
     this.game.add.existing(this.boundaries.left);
     this.game.add.existing(this.boundaries.right);
     this.game.add.existing(this.boundaries.top);
+    this.game.add.existing(this.boundaries.bottom);
   }
 
   private positionEntities(): void {

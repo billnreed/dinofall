@@ -21,6 +21,12 @@ export class Boundary extends Phaser.Sprite {
         this.height = 1;
         this.width = this.game.width;
         break;
+      case Phaser.DOWN:
+        this.x = 0;
+        this.y = this.game.height;
+        this.width = this.game.width;
+        this.height = 1;
+        break;
     }
   }
 
