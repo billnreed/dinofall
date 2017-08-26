@@ -2,6 +2,8 @@ import { GameStateEntities } from '../types/states/game/entities';
 import { GameStateSpawners } from '../types/states/game/spawners';
 import { GameStatePools } from '../types/states/game/pools';
 import { GameStateBoundaries } from '../types/states/game/boundaries';
+import { GameStateCounters } from '../types/states/game/counters';
+import { GameStateGui } from '../types/states/game/gui';
 
 import { FloorSpawner } from '../spawners/floor-spawner';
 import { FloorPool } from '../pools/floor-pool';
@@ -13,13 +15,12 @@ import { DepthCounter } from '../gui/counters/depth-counter';
 import { DepthText } from '../gui/text/depth-text';
 
 export class GameState extends Phaser.State {
+  private counters: GameStateCounters;
   private entities: GameStateEntities;
   private spawners: GameStateSpawners;
   private pools: GameStatePools;
   private boundaries: GameStateBoundaries;
-
-  private depthCounter: DepthCounter;
-  private depthText: DepthText;
+  private gui: GameStateGui;
 
   public preload(): void {
     this.game.load.image('ground', 'assets/abstract-platformer/PNG/Tiles/Brown tiles/tileBrown_02.png');
@@ -28,19 +29,19 @@ export class GameState extends Phaser.State {
   }
 
   public create(): void {
+    this.counters = this.createCounters();
     this.entities = this.createEntities();
     this.pools = this.createPools();
     this.spawners = this.createSpawners();
     this.boundaries = this.createBoundaries();
-
-    this.depthCounter = new DepthCounter(this.game);
-    this.depthText = new DepthText(this.game, this.depthCounter);
-    this.game.add.existing(this.depthText);
+    this.gui = this.createGui();
 
     this.enablePhysics();
 
     this.addEntities();
     this.positionEntities();
+
+    this.addGui();
 
     this.enableInput();
 
@@ -58,7 +59,15 @@ export class GameState extends Phaser.State {
       this.game.state.start('title');
     });
 
-    this.depthText.updateDepthValue();
+    this.gui.depthText.updateDepthValue();
+  }
+
+  private createCounters(): GameStateCounters {
+    const depth = new DepthCounter(this.game);
+
+    return {
+      depth,
+    };
   }
 
   private createEntities(): GameStateEntities {
@@ -98,6 +107,14 @@ export class GameState extends Phaser.State {
     };
   }
 
+  private createGui(): GameStateGui {
+    const depthText = new DepthText(this.game, this.counters.depth);
+
+    return {
+      depthText,
+    };
+  }
+
   private enablePhysics(): void {
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -128,6 +145,10 @@ export class GameState extends Phaser.State {
     this.entities.dinosaur.centerY = this.world.centerY - 200;
   }
 
+  private addGui(): void {
+    this.game.add.existing(this.gui.depthText);
+  }
+
   private enableInput(): void {
     this.input.onDown.add(() => {
       if (this.input.activePointer.x < this.world.centerX) {
@@ -140,6 +161,6 @@ export class GameState extends Phaser.State {
 
   private start(): void {
     this.spawners.floorSpawner.start();
-    this.depthCounter.start();
+    this.counters.depth.start();
   }
 }
