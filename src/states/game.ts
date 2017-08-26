@@ -10,6 +10,7 @@ import { Dinosaur } from '../entities/dinosaur';
 import { Boundary } from '../entities/boundary';
 
 import { DepthCounter } from '../gui/counters/depth-counter';
+import { DepthText } from '../gui/text/depth-text';
 
 export class GameState extends Phaser.State {
   private entities: GameStateEntities;
@@ -18,7 +19,7 @@ export class GameState extends Phaser.State {
   private boundaries: GameStateBoundaries;
 
   private depthCounter: DepthCounter;
-  private depthText: Phaser.BitmapText;
+  private depthText: DepthText;
 
   public preload(): void {
     this.game.load.image('ground', 'assets/abstract-platformer/PNG/Tiles/Brown tiles/tileBrown_02.png');
@@ -33,7 +34,8 @@ export class GameState extends Phaser.State {
     this.boundaries = this.createBoundaries();
 
     this.depthCounter = new DepthCounter(this.game);
-    this.depthText = this.game.add.bitmapText(0, 0, 'gemFont', 'Depth: ', 64);
+    this.depthText = new DepthText(this.game, this.depthCounter);
+    this.game.add.existing(this.depthText);
 
     this.enablePhysics();
 
@@ -56,7 +58,7 @@ export class GameState extends Phaser.State {
       this.game.state.start('title');
     });
 
-    this.depthText.text = `Depth: ${this.depthCounter.getDepth()}`;
+    this.depthText.updateDepthValue();
   }
 
   private createEntities(): GameStateEntities {
