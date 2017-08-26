@@ -22,6 +22,8 @@ export class GameState extends Phaser.State {
   private boundaries: GameStateBoundaries;
   private gui: GameStateGui;
 
+  private isBoosting: boolean;
+
   public preload(): void {
     this.game.load.image('ground', 'assets/abstract-platformer/PNG/Tiles/Brown tiles/tileBrown_02.png');
     this.game.load.spritesheet('dinosaur', 'assets/characters/dinosaur-spritesheet.png', 93, 128);
@@ -36,6 +38,8 @@ export class GameState extends Phaser.State {
     this.boundaries = this.createBoundaries();
     this.gui = this.createGui(this.counters.depth);
 
+    this.isBoosting = false;
+
     this.enablePhysics();
 
     this.addEntities();
@@ -49,17 +53,48 @@ export class GameState extends Phaser.State {
   }
 
   public update(): void {
-    this.pools.floorPool.forEach((floor: Floor) => {
-      this.physics.arcade.collide(floor, this.entities.dinosaur);
-    }, null);
+    if (!this.isBoosting) {
+      this.pools.floorPool.forEach((floor: Floor) => {
+        // | stop collisions between dinosaur and platforms
+        this.physics.arcade.collide(floor, this.entities.dinosaur);
+      }, null);
+    }
 
     this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.left);
     this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.right);
     this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.top, () => {
       this.game.state.start('title');
     });
+
+    this.gui.depthText.updateDepthValue();
+
     this.physics.arcade.overlap(this.entities.dinosaur, this.boundaries.bottom, () => {
-      console.log('hit the bottom');
+      if (!this.isBoosting) {
+        console.log('starting boost');
+        this.isBoosting = true;
+
+        // dinosaur
+        this.entities.dinosaur.enterBoostMode();
+        const dinoBoostPositionTween = this.game.add.tween(this.entities.dinosaur);
+        dinoBoostPositionTween.to({
+          x: this.entities.dinosaur.x,
+          y: 150,
+        }, 2000);
+        const dinoBoostScaleTween = this.game.add.tween(this.entities.dinosaur.scale);
+        dinoBoostScaleTween.to({
+          x: this.entities.dinosaur.scale.x * 2,
+          y: this.entities.dinosaur.scale.y * 2,
+        }, 1000).to({
+          x: this.entities.dinosaur.scale.x,
+          y: this.entities.dinosaur.scale.y,
+        }, 1000);
+        dinoBoostPositionTween.onComplete.add(() => this.entities.dinosaur.exitBoostMode());
+        dinoBoostPositionTween.onComplete.add(() => { this.isBoosting = false; });
+        dinoBoostPositionTween.start();
+        dinoBoostScaleTween.start();
+
+        //
+      }
       // | stop collisions between dinosaur and platforms
       // | stop dinosaur falling & moving to side
       //  \
@@ -72,8 +107,6 @@ export class GameState extends Phaser.State {
       // | reenable dinosaur falling & movement
       // | reenable collisions between dinosaur and platforms
     });
-
-    this.gui.depthText.updateDepthValue();
   }
 
   private createCounters(): GameStateCounters {
@@ -170,10 +203,12 @@ export class GameState extends Phaser.State {
 
   private enableInput(): void {
     this.input.onDown.add(() => {
-      if (this.input.activePointer.x < this.world.centerX) {
-        this.entities.dinosaur.goLeft();
-      } else {
-        this.entities.dinosaur.goRight();
+      if (!this.isBoosting) {
+        if (this.input.activePointer.x < this.world.centerX) {
+          this.entities.dinosaur.goLeft();
+        } else {
+          this.entities.dinosaur.goRight();
+        }
       }
     });
   }

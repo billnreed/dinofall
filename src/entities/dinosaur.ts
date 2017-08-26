@@ -9,6 +9,7 @@ export class Dinosaur extends Phaser.Sprite {
   };
 
   private direction: number;
+  private isBoosting: boolean;
 
   constructor(game: Phaser.Game) {
     super(game, 0, 0, 'dinosaur');
@@ -17,10 +18,14 @@ export class Dinosaur extends Phaser.Sprite {
     this.scale.setTo(2, 2);
     this.height = 128;
     this.width = 93;
+
+    this.isBoosting = false;
   }
 
   public update(): void {
-    if (!this.body.blocked.down) {
+    if (this.isBoosting) {
+      this.body.velocity.y = 0;
+    } else if (!this.body.blocked.down) {
       this.body.velocity.y = GameConfig.entities.dinosaur.fallSpeed;
     }
 
@@ -29,6 +34,14 @@ export class Dinosaur extends Phaser.Sprite {
     } else if (this.direction === Phaser.RIGHT && !this.body.blocked.right) {
       this.body.velocity.x = GameConfig.entities.dinosaur.moveSpeed;
     }
+  }
+
+  public enterBoostMode(): void {
+    this.isBoosting = true;
+  }
+
+  public exitBoostMode(): void {
+    this.isBoosting = false;
   }
 
   public goLeft():void {
