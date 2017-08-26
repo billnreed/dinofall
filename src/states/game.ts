@@ -32,9 +32,9 @@ export class GameState extends Phaser.State {
     this.counters = this.createCounters();
     this.entities = this.createEntities();
     this.pools = this.createPools();
-    this.spawners = this.createSpawners();
+    this.spawners = this.createSpawners(this.pools.floorPool);
     this.boundaries = this.createBoundaries();
-    this.gui = this.createGui();
+    this.gui = this.createGui(this.counters.depth);
 
     this.enablePhysics();
 
@@ -87,8 +87,8 @@ export class GameState extends Phaser.State {
     };
   }
 
-  private createSpawners(): GameStateSpawners {
-    const floorSpawner: FloorSpawner = new FloorSpawner(this.game, this.pools.floorPool);
+  private createSpawners(floorPool: FloorPool): GameStateSpawners {
+    const floorSpawner: FloorSpawner = new FloorSpawner(this.game, floorPool);
 
     return {
       floorSpawner,
@@ -107,8 +107,8 @@ export class GameState extends Phaser.State {
     };
   }
 
-  private createGui(): GameStateGui {
-    const depthText = new DepthText(this.game, this.counters.depth);
+  private createGui(depthCounter: DepthCounter): GameStateGui {
+    const depthText = new DepthText(this.game, depthCounter);
 
     return {
       depthText,
