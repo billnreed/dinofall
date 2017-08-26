@@ -17,5 +17,10 @@ export const GameConfig = {
     floor: {
       delay: 1000,
     }
+  },
+  counters: {
+    depth: {
+      delay: 75,
+    }
   }
 };
