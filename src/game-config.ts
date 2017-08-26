@@ -15,7 +15,7 @@ export const GameConfig = {
   },
   spawners: {
     floor: {
-      delay: 1500,
+      delay: 1000,
     }
   }
 };

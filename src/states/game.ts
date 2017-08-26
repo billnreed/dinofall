@@ -1,19 +1,19 @@
 import { GameStateEntities } from '../types/states/game/entities';
 import { GameStateSpawners } from '../types/states/game/spawners';
 import { GameStatePools } from '../types/states/game/pools';
-import { GameStateWalls } from '../types/states/game/walls';
+import { GameStateBoundaries } from '../types/states/game/boundaries';
 
 import { FloorSpawner } from '../spawners/floor-spawner';
 import { FloorPool } from '../pools/floor-pool';
 import { Floor } from '../entities/floor';
 import { Dinosaur } from '../entities/dinosaur';
-import { Wall } from '../entities/wall';
+import { Boundary } from '../entities/boundary';
 
 export class GameState extends Phaser.State {
   private entities: GameStateEntities;
   private spawners: GameStateSpawners;
   private pools: GameStatePools;
-  private walls: GameStateWalls;
+  private boundaries: GameStateBoundaries;
 
   public preload(): void {
     this.game.load.image('ground', 'assets/abstract-platformer/PNG/Tiles/Brown tiles/tileBrown_02.png');
@@ -24,7 +24,7 @@ export class GameState extends Phaser.State {
     this.entities = this.createEntities();
     this.pools = this.createPools();
     this.spawners = this.createSpawners();
-    this.walls = this.createWalls();
+    this.boundaries = this.createBoundaries();
 
     this.enablePhysics();
 
@@ -41,9 +41,9 @@ export class GameState extends Phaser.State {
       this.physics.arcade.collide(floor, this.entities.dinosaur);
     }, null);
 
-    this.physics.arcade.collide(this.entities.dinosaur, this.walls.left);
-    this.physics.arcade.collide(this.entities.dinosaur, this.walls.right);
-    this.physics.arcade.collide(this.entities.dinosaur, this.walls.top, () => {
+    this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.left);
+    this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.right);
+    this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.top, () => {
       this.game.state.start('title');
     });
   }
@@ -73,10 +73,10 @@ export class GameState extends Phaser.State {
     };
   }
 
-  private createWalls(): GameStateWalls {
-    const left = new Wall(this.game, Phaser.LEFT);
-    const right = new Wall(this.game, Phaser.RIGHT);
-    const top = new Wall(this.game, Phaser.UP);
+  private createBoundaries(): GameStateBoundaries {
+    const left = new Boundary(this.game, Phaser.LEFT);
+    const right = new Boundary(this.game, Phaser.RIGHT);
+    const top = new Boundary(this.game, Phaser.UP);
 
     return {
       left,
@@ -92,20 +92,20 @@ export class GameState extends Phaser.State {
 
     this.pools.floorPool.enablePhysics();
 
-    this.physics.enable(this.walls.left);
-    this.physics.enable(this.walls.right);
-    this.physics.enable(this.walls.top);
-    this.walls.left.initPhysics();
-    this.walls.right.initPhysics();
-    this.walls.top.initPhysics();
+    this.physics.enable(this.boundaries.left);
+    this.physics.enable(this.boundaries.right);
+    this.physics.enable(this.boundaries.top);
+    this.boundaries.left.initPhysics();
+    this.boundaries.right.initPhysics();
+    this.boundaries.top.initPhysics();
   }
 
   private addEntities(): void {
     this.game.add.existing(this.entities.dinosaur);
     this.game.add.existing(this.pools.floorPool);
-    this.game.add.existing(this.walls.left);
-    this.game.add.existing(this.walls.right);
-    this.game.add.existing(this.walls.top);
+    this.game.add.existing(this.boundaries.left);
+    this.game.add.existing(this.boundaries.right);
+    this.game.add.existing(this.boundaries.top);
   }
 
   private positionEntities(): void {

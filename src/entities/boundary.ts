@@ -1,4 +1,4 @@
-export class Wall extends Phaser.Sprite {
+export class Boundary extends Phaser.Sprite {
   constructor(game: Phaser.Game, side: number) {
     super(game, 0, 0);
 
