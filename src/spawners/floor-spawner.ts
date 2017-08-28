@@ -23,7 +23,7 @@ export class FloorSpawner {
     floor.startMovement();
   }
 
-  start() {
+  start(): void {
     this.spawnTimer.loop(GameConfig.spawners.floor.delay, () => {
       const floor = this.floorPool.getFirstAvailable();
 
@@ -31,5 +31,13 @@ export class FloorSpawner {
       floor.startMovement();
     }, this);
     this.spawnTimer.start();
+  }
+
+  pause(): void {
+    this.spawnTimer.pause();
+  }
+
+  resume(): void {
+    this.spawnTimer.resume();
   }
 }

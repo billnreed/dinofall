@@ -14,6 +14,8 @@ import { Boundary } from '../entities/boundary';
 import { DepthCounter } from '../gui/counters/depth-counter';
 import { DepthText } from '../gui/text/depth-text';
 
+import { GameConfig } from '../game-config';
+
 export class GameState extends Phaser.State {
   private counters: GameStateCounters;
   private entities: GameStateEntities;
@@ -72,6 +74,7 @@ export class GameState extends Phaser.State {
       if (!this.isBoosting) {
         console.log('starting boost');
         this.isBoosting = true;
+        const boostDuration = 2000;
 
         // dinosaur
         this.entities.dinosaur.enterBoostMode();
@@ -79,21 +82,33 @@ export class GameState extends Phaser.State {
         dinoBoostPositionTween.to({
           x: this.entities.dinosaur.x,
           y: 150,
-        }, 2000);
+        }, boostDuration);
         const dinoBoostScaleTween = this.game.add.tween(this.entities.dinosaur.scale);
         dinoBoostScaleTween.to({
           x: this.entities.dinosaur.scale.x * 2,
           y: this.entities.dinosaur.scale.y * 2,
-        }, 1000).to({
+        }, boostDuration / 2).to({
           x: this.entities.dinosaur.scale.x,
           y: this.entities.dinosaur.scale.y,
-        }, 1000);
+        }, boostDuration / 2);
         dinoBoostPositionTween.onComplete.add(() => this.entities.dinosaur.exitBoostMode());
         dinoBoostPositionTween.onComplete.add(() => { this.isBoosting = false; });
         dinoBoostPositionTween.start();
         dinoBoostScaleTween.start();
 
-        //
+        // floors
+        this.spawners.floorSpawner.pause();
+        const originalFloorMoveSpeed = GameConfig.entities.floor.moveSpeed;
+        const floorBoostSpeedTween = this.game.add.tween(GameConfig.entities.floor);
+        floorBoostSpeedTween.to({
+          moveSpeed: originalFloorMoveSpeed * 4,
+        }, boostDuration, Phaser.Easing.Cubic.Out);
+        floorBoostSpeedTween.onComplete.add(() => {
+          GameConfig.entities.floor.moveSpeed = originalFloorMoveSpeed;
+          this.spawners.floorSpawner.resume();
+        });
+        floorBoostSpeedTween.start();
+
       }
       // | stop collisions between dinosaur and platforms
       // | stop dinosaur falling & moving to side

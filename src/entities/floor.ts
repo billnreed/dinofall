@@ -8,10 +8,13 @@ export class Floor extends Phaser.Group {
   public onExitWorld: Phaser.Signal;
   public body: Phaser.Physics.Arcade.Body;
 
+  private isMoving: boolean;
+
   constructor(game: Phaser.Game) {
     super(game);
 
     this.onExitWorld = new Phaser.Signal();
+    this.isMoving = false;
 
     const necessaryTiles = Math.ceil(this.game.width / Floor.TILE_WIDTH);
     this.createMultiple(necessaryTiles, 'ground', 0, true);
@@ -21,6 +24,10 @@ export class Floor extends Phaser.Group {
   }
 
   public update(): void {
+    if (this.isMoving) {
+      this.setAll('body.velocity.y', -1 * GameConfig.entities.floor.moveSpeed);
+    }
+
     if (this.bottom < 0) {
       this.onExitWorld.dispatch(this);
     }
@@ -31,7 +38,7 @@ export class Floor extends Phaser.Group {
   }
 
   public startMovement(): void {
-    this.setAll('body.velocity.y', -1 * GameConfig.entities.floor.moveSpeed);
+    this.isMoving = true;
   }
 
   public recycle(): void {
