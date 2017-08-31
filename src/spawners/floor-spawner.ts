@@ -4,10 +4,12 @@ import { FloorPool } from '../pools/floor-pool';
 export class FloorSpawner {
   public onSpawn: Phaser.Signal;
 
-  private spawnTimer: Phaser.Timer;
+  private game: Phaser.Game;
   private floorPool: FloorPool;
+  private spawnTimer: Phaser.Timer;
 
   constructor(game: Phaser.Game, floorPool: FloorPool) {
+    this.game = game;
     this.floorPool = floorPool;
 
     this.onSpawn = new Phaser.Signal();
@@ -33,10 +35,11 @@ export class FloorSpawner {
     this.spawnTimer.start();
   }
 
-  boost(boostDuration: number, floorBoostSpeedTween: Phaser.Tween): void {
+  boost(boostDuration: number): void {
     this.pause();
 
     const originalFloorMoveSpeed = LevelConfig.entities.floor.moveSpeed;
+    const floorBoostSpeedTween = this.game.add.tween(LevelConfig.entities.floor);
     floorBoostSpeedTween.to({
       moveSpeed: originalFloorMoveSpeed * 4,
     }, boostDuration);
@@ -44,6 +47,7 @@ export class FloorSpawner {
       LevelConfig.entities.floor.moveSpeed = originalFloorMoveSpeed;
       this.resume();
     });
+
     floorBoostSpeedTween.start();
   }
 

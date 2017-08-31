@@ -14,7 +14,6 @@ import { Boundary } from '../entities/boundary';
 import { DepthCounter } from '../gui/counters/depth-counter';
 import { DepthText } from '../gui/text/depth-text';
 
-import { LevelConfig } from '../level-config';
 import { LevelStates } from '../state-machines/level-states';
 
 export class LevelState extends Phaser.State {
@@ -62,25 +61,24 @@ export class LevelState extends Phaser.State {
       this.pools.floorPool.forEach((floor: Floor) => {
         this.physics.arcade.collide(floor, this.entities.dinosaur);
       }, null);
-    }
 
-    this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.left);
-    this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.right);
-    this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.top, () => {
-      this.game.state.start('title');
-    });
-
-    this.gui.depthText.updateDepthValue();
-
-    this.physics.arcade.overlap(this.entities.dinosaur, this.boundaries.bottom, () => {
-      if (this.currentState === LevelStates.FALLING) {
+      this.physics.arcade.overlap(this.entities.dinosaur, this.boundaries.bottom, () => {
         this.currentState = LevelStates.BOOSTING;
         const boostDuration = 2000;
 
         this.entities.dinosaur.boost(boostDuration, () => { this.currentState = LevelStates.FALLING; });
-        this.spawners.floorSpawner.boost(boostDuration, this.game.add.tween(LevelConfig.entities.floor));
-      }
-    });
+        this.spawners.floorSpawner.boost(boostDuration);
+      });
+
+      this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.top, () => {
+        this.game.state.start('title');
+      });
+    }
+
+    this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.left);
+    this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.right);
+
+    this.gui.depthText.updateDepthValue();
   }
 
   private createCounters(): GameStateCounters {
