@@ -1,4 +1,4 @@
-import { GameConfig } from '../game-config';
+import { LevelConfig } from '../level-config';
 import { FloorPool } from '../pools/floor-pool';
 
 export class FloorSpawner {
@@ -24,7 +24,7 @@ export class FloorSpawner {
   }
 
   start(): void {
-    this.spawnTimer.loop(GameConfig.spawners.floor.delay, () => {
+    this.spawnTimer.loop(LevelConfig.spawners.floor.delay, () => {
       const floor = this.floorPool.getFirstAvailable();
 
       floor.reuse();

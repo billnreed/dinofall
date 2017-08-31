@@ -32,7 +32,7 @@ export class TitleState extends Phaser.State {
 
   private addStartListener():void {
     this.input.onDown.add(() => {
-      this.state.start('game');
+      this.state.start('level');
     });
   }
 }

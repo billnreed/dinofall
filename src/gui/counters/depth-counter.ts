@@ -1,4 +1,4 @@
-import { GameConfig } from '../../game-config';
+import { LevelConfig } from '../../level-config';
 
 export class DepthCounter {
   private depth: number;
@@ -12,7 +12,7 @@ export class DepthCounter {
   }
 
   start(): void {
-    this.countTimer.loop(GameConfig.counters.depth.delay, () => {
+    this.countTimer.loop(LevelConfig.counters.depth.delay, () => {
       this.depth += 1;
     });
 

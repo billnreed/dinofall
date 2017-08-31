@@ -14,9 +14,9 @@ import { Boundary } from '../entities/boundary';
 import { DepthCounter } from '../gui/counters/depth-counter';
 import { DepthText } from '../gui/text/depth-text';
 
-import { GameConfig } from '../game-config';
+import { LevelConfig } from '../level-config';
 
-export class GameState extends Phaser.State {
+export class LevelState extends Phaser.State {
   private counters: GameStateCounters;
   private entities: GameStateEntities;
   private spawners: GameStateSpawners;
@@ -57,7 +57,6 @@ export class GameState extends Phaser.State {
   public update(): void {
     if (!this.isBoosting) {
       this.pools.floorPool.forEach((floor: Floor) => {
-        // | stop collisions between dinosaur and platforms
         this.physics.arcade.collide(floor, this.entities.dinosaur);
       }, null);
     }
@@ -72,7 +71,6 @@ export class GameState extends Phaser.State {
 
     this.physics.arcade.overlap(this.entities.dinosaur, this.boundaries.bottom, () => {
       if (!this.isBoosting) {
-        console.log('starting boost');
         this.isBoosting = true;
         const boostDuration = 2000;
 
@@ -98,29 +96,18 @@ export class GameState extends Phaser.State {
 
         // floors
         this.spawners.floorSpawner.pause();
-        const originalFloorMoveSpeed = GameConfig.entities.floor.moveSpeed;
-        const floorBoostSpeedTween = this.game.add.tween(GameConfig.entities.floor);
+        const originalFloorMoveSpeed = LevelConfig.entities.floor.moveSpeed;
+        const floorBoostSpeedTween = this.game.add.tween(LevelConfig.entities.floor);
         floorBoostSpeedTween.to({
           moveSpeed: originalFloorMoveSpeed * 4,
-        }, boostDuration, Phaser.Easing.Cubic.Out);
+        }, boostDuration);
         floorBoostSpeedTween.onComplete.add(() => {
-          GameConfig.entities.floor.moveSpeed = originalFloorMoveSpeed;
+          LevelConfig.entities.floor.moveSpeed = originalFloorMoveSpeed;
           this.spawners.floorSpawner.resume();
         });
         floorBoostSpeedTween.start();
 
       }
-      // | stop collisions between dinosaur and platforms
-      // | stop dinosaur falling & moving to side
-      //  \
-      //   | tween dinosaur to top      |\
-      //   | scroll platforms real fast |-- these are all in a timed event together
-      //   | count depth real fast      |/
-      //  /
-      // | make platforms scroll at correct speed
-      // | make depth counter go at correct speed
-      // | reenable dinosaur falling & movement
-      // | reenable collisions between dinosaur and platforms
     });
   }
 

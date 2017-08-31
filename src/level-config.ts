@@ -1,4 +1,4 @@
-export const GameConfig = {
+export const LevelConfig = {
   entities: {
     dinosaur: {
       moveSpeed: 400,

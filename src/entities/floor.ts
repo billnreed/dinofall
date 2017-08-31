@@ -1,4 +1,4 @@
-import { GameConfig } from '../game-config';
+import { LevelConfig } from '../level-config';
 
 export class Floor extends Phaser.Group {
 
@@ -25,7 +25,7 @@ export class Floor extends Phaser.Group {
 
   public update(): void {
     if (this.isMoving) {
-      this.setAll('body.velocity.y', -1 * GameConfig.entities.floor.moveSpeed);
+      this.setAll('body.velocity.y', -1 * LevelConfig.entities.floor.moveSpeed);
     }
 
     if (this.bottom < 0) {

@@ -1,4 +1,4 @@
-import { GameConfig } from '../game-config';
+import { LevelConfig } from '../level-config';
 import { DinosaurFrames } from '../types/entities/dinosaur/dinosaur-frames';
 
 export class Dinosaur extends Phaser.Sprite {
@@ -26,13 +26,13 @@ export class Dinosaur extends Phaser.Sprite {
     if (this.isBoosting) {
       this.body.velocity.y = 0;
     } else if (!this.body.blocked.down) {
-      this.body.velocity.y = GameConfig.entities.dinosaur.fallSpeed;
+      this.body.velocity.y = LevelConfig.entities.dinosaur.fallSpeed;
     }
 
     if (this.direction === Phaser.LEFT && !this.body.blocked.left) {
-      this.body.velocity.x = -1 * GameConfig.entities.dinosaur.moveSpeed;
+      this.body.velocity.x = -1 * LevelConfig.entities.dinosaur.moveSpeed;
     } else if (this.direction === Phaser.RIGHT && !this.body.blocked.right) {
-      this.body.velocity.x = GameConfig.entities.dinosaur.moveSpeed;
+      this.body.velocity.x = LevelConfig.entities.dinosaur.moveSpeed;
     }
   }
 
@@ -47,12 +47,12 @@ export class Dinosaur extends Phaser.Sprite {
   public goLeft():void {
     this.frame = this.FRAMES.FACE_LEFT;
     this.direction = Phaser.LEFT;
-    this.body.velocity.x = -1 * GameConfig.entities.dinosaur.moveSpeed;
+    this.body.velocity.x = -1 * LevelConfig.entities.dinosaur.moveSpeed;
   }
 
   public goRight():void {
     this.frame = this.FRAMES.FACE_RIGHT;
     this.direction = Phaser.RIGHT;
-    this.body.velocity.x = GameConfig.entities.dinosaur.moveSpeed;
+    this.body.velocity.x = LevelConfig.entities.dinosaur.moveSpeed;
   }
 }

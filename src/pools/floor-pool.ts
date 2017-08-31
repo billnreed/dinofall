@@ -1,4 +1,4 @@
-import { GameConfig } from '../game-config';
+import { LevelConfig } from '../level-config';
 import { Floor } from '../entities/floor';
 
 export class FloorPool extends Phaser.Group {
@@ -8,7 +8,7 @@ export class FloorPool extends Phaser.Group {
   }
 
   public createFloors(): void {
-    for (let i = 0; i < GameConfig.pools.floor.size; i++) {
+    for (let i = 0; i < LevelConfig.pools.floor.size; i++) {
       const floor = new Floor(this.game);
       this.add(floor);
     }
