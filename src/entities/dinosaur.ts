@@ -25,19 +25,30 @@ export class Dinosaur extends Phaser.Sprite {
   }
 
   public update(): void {
-    if (this.currentState === LevelStates.BOOSTING) {
-      this.body.velocity.y = 0;
-    } else if (this.currentState === LevelStates.FALLING) {
-      if (!this.body.blocked.down) {
-        this.body.velocity.y = LevelConfig.entities.dinosaur.fallSpeed;
-      }
-
-      if (this.direction === Phaser.LEFT && !this.body.blocked.left) {
-        this.body.velocity.x = -1 * LevelConfig.entities.dinosaur.moveSpeed;
-      } else if (this.direction === Phaser.RIGHT && !this.body.blocked.right) {
-        this.body.velocity.x = LevelConfig.entities.dinosaur.moveSpeed;
-      }
+    switch(this.currentState) {
+      case LevelStates.FALLING:
+        this.updateFalling();
+        break;
+      case LevelStates.BOOSTING:
+        this.updateBoosting();
+        break;
     }
+  }
+
+  private updateFalling(): void {
+    if (!this.body.blocked.down) {
+      this.body.velocity.y = LevelConfig.entities.dinosaur.fallSpeed;
+    }
+
+    if (this.direction === Phaser.LEFT && !this.body.blocked.left) {
+      this.body.velocity.x = -1 * LevelConfig.entities.dinosaur.moveSpeed;
+    } else if (this.direction === Phaser.RIGHT && !this.body.blocked.right) {
+      this.body.velocity.x = LevelConfig.entities.dinosaur.moveSpeed;
+    }
+  }
+
+  private updateBoosting(): void {
+    this.body.velocity.y = 0;
   }
 
   public boost(boostDuration: number, onFinishBoost: () => void): void {
