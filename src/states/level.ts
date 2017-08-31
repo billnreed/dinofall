@@ -78,7 +78,7 @@ export class LevelState extends Phaser.State {
         const boostDuration = 2000;
 
         // dinosaur
-        this.entities.dinosaur.enterBoostMode();
+        this.entities.dinosaur.enterBoostState();
         const dinoBoostPositionTween = this.game.add.tween(this.entities.dinosaur);
         dinoBoostPositionTween.to({
           x: this.entities.dinosaur.x,
@@ -92,7 +92,7 @@ export class LevelState extends Phaser.State {
           x: this.entities.dinosaur.scale.x,
           y: this.entities.dinosaur.scale.y,
         }, boostDuration / 2);
-        dinoBoostPositionTween.onComplete.add(() => this.entities.dinosaur.exitBoostMode());
+        dinoBoostPositionTween.onComplete.add(() => this.entities.dinosaur.enterFallingState());
         dinoBoostPositionTween.onComplete.add(() => { this.currentState = LevelStates.FALLING; });
         dinoBoostPositionTween.start();
         dinoBoostScaleTween.start();
@@ -109,7 +109,6 @@ export class LevelState extends Phaser.State {
           this.spawners.floorSpawner.resume();
         });
         floorBoostSpeedTween.start();
-
       }
     });
   }
