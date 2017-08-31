@@ -33,6 +33,20 @@ export class FloorSpawner {
     this.spawnTimer.start();
   }
 
+  boost(boostDuration: number, floorBoostSpeedTween: Phaser.Tween): void {
+    this.pause();
+
+    const originalFloorMoveSpeed = LevelConfig.entities.floor.moveSpeed;
+    floorBoostSpeedTween.to({
+      moveSpeed: originalFloorMoveSpeed * 4,
+    }, boostDuration);
+    floorBoostSpeedTween.onComplete.add(() => {
+      LevelConfig.entities.floor.moveSpeed = originalFloorMoveSpeed;
+      this.resume();
+    });
+    floorBoostSpeedTween.start();
+  }
+
   pause(): void {
     this.spawnTimer.pause();
   }

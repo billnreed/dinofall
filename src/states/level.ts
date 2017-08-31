@@ -77,21 +77,8 @@ export class LevelState extends Phaser.State {
         this.currentState = LevelStates.BOOSTING;
         const boostDuration = 2000;
 
-        // dinosaur
         this.entities.dinosaur.boost(boostDuration, () => { this.currentState = LevelStates.FALLING; });
-
-        // floors
-        this.spawners.floorSpawner.pause();
-        const originalFloorMoveSpeed = LevelConfig.entities.floor.moveSpeed;
-        const floorBoostSpeedTween = this.game.add.tween(LevelConfig.entities.floor);
-        floorBoostSpeedTween.to({
-          moveSpeed: originalFloorMoveSpeed * 4,
-        }, boostDuration);
-        floorBoostSpeedTween.onComplete.add(() => {
-          LevelConfig.entities.floor.moveSpeed = originalFloorMoveSpeed;
-          this.spawners.floorSpawner.resume();
-        });
-        floorBoostSpeedTween.start();
+        this.spawners.floorSpawner.boost(boostDuration, this.game.add.tween(LevelConfig.entities.floor));
       }
     });
   }
