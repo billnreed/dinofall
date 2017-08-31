@@ -15,7 +15,7 @@ import { DepthCounter } from '../gui/counters/depth-counter';
 import { DepthText } from '../gui/text/depth-text';
 
 import { LevelConfig } from '../level-config';
-import { LevelStateMachine } from '../state-machines/states/level';
+import { LevelStates } from '../state-machines/level-states';
 
 export class LevelState extends Phaser.State {
   private counters: GameStateCounters;
@@ -25,10 +25,10 @@ export class LevelState extends Phaser.State {
   private boundaries: GameStateBoundaries;
   private gui: GameStateGui;
 
-  private currentState: LevelStateMachine;
+  private currentState: LevelStates;
 
   public init(): void {
-    this.currentState = LevelStateMachine.FALLING;
+    this.currentState = LevelStates.FALLING;
   }
 
   public preload(): void {
@@ -58,7 +58,7 @@ export class LevelState extends Phaser.State {
   }
 
   public update(): void {
-    if (this.currentState === LevelStateMachine.FALLING) {
+    if (this.currentState === LevelStates.FALLING) {
       this.pools.floorPool.forEach((floor: Floor) => {
         this.physics.arcade.collide(floor, this.entities.dinosaur);
       }, null);
@@ -73,8 +73,8 @@ export class LevelState extends Phaser.State {
     this.gui.depthText.updateDepthValue();
 
     this.physics.arcade.overlap(this.entities.dinosaur, this.boundaries.bottom, () => {
-      if (this.currentState === LevelStateMachine.FALLING) {
-        this.currentState = LevelStateMachine.BOOSTING;
+      if (this.currentState === LevelStates.FALLING) {
+        this.currentState = LevelStates.BOOSTING;
         const boostDuration = 2000;
 
         // dinosaur
@@ -93,7 +93,7 @@ export class LevelState extends Phaser.State {
           y: this.entities.dinosaur.scale.y,
         }, boostDuration / 2);
         dinoBoostPositionTween.onComplete.add(() => this.entities.dinosaur.exitBoostMode());
-        dinoBoostPositionTween.onComplete.add(() => { this.currentState = LevelStateMachine.FALLING; });
+        dinoBoostPositionTween.onComplete.add(() => { this.currentState = LevelStates.FALLING; });
         dinoBoostPositionTween.start();
         dinoBoostScaleTween.start();
 
@@ -208,7 +208,7 @@ export class LevelState extends Phaser.State {
 
   private enableInput(): void {
     this.input.onDown.add(() => {
-      if (this.currentState === LevelStateMachine.FALLING) {
+      if (this.currentState === LevelStates.FALLING) {
         if (this.input.activePointer.x < this.world.centerX) {
           this.entities.dinosaur.goLeft();
         } else {
