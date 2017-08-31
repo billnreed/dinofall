@@ -78,24 +78,7 @@ export class LevelState extends Phaser.State {
         const boostDuration = 2000;
 
         // dinosaur
-        this.entities.dinosaur.enterBoostState();
-        const dinoBoostPositionTween = this.game.add.tween(this.entities.dinosaur);
-        dinoBoostPositionTween.to({
-          x: this.entities.dinosaur.x,
-          y: 150,
-        }, boostDuration);
-        const dinoBoostScaleTween = this.game.add.tween(this.entities.dinosaur.scale);
-        dinoBoostScaleTween.to({
-          x: this.entities.dinosaur.scale.x * 2,
-          y: this.entities.dinosaur.scale.y * 2,
-        }, boostDuration / 2).to({
-          x: this.entities.dinosaur.scale.x,
-          y: this.entities.dinosaur.scale.y,
-        }, boostDuration / 2);
-        dinoBoostPositionTween.onComplete.add(() => this.entities.dinosaur.enterFallingState());
-        dinoBoostPositionTween.onComplete.add(() => { this.currentState = LevelStates.FALLING; });
-        dinoBoostPositionTween.start();
-        dinoBoostScaleTween.start();
+        this.entities.dinosaur.boost(boostDuration, () => { this.currentState = LevelStates.FALLING; });
 
         // floors
         this.spawners.floorSpawner.pause();

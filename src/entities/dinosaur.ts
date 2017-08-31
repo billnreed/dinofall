@@ -40,12 +40,30 @@ export class Dinosaur extends Phaser.Sprite {
     }
   }
 
-  public enterBoostState(): void {
+  public boost(boostDuration: number, onFinishBoost: () => void): void {
     this.currentState = LevelStates.BOOSTING;
-  }
 
-  public enterFallingState(): void {
-    this.currentState = LevelStates.FALLING;
+    const dinoBoostPositionTween = this.game.add.tween(this);
+    dinoBoostPositionTween.to({
+      x: this.x,
+      y: 150,
+    }, boostDuration);
+    dinoBoostPositionTween.onComplete.add(() => {
+      this.currentState = LevelStates.FALLING;
+      onFinishBoost.call(null);
+    });
+
+    const dinoBoostScaleTween = this.game.add.tween(this.scale);
+    dinoBoostScaleTween.to({
+      x: this.scale.x * 2,
+      y: this.scale.y * 2,
+    }, boostDuration / 2).to({
+      x: this.scale.x,
+      y: this.scale.y,
+    }, boostDuration / 2);
+
+    dinoBoostPositionTween.start();
+    dinoBoostScaleTween.start();
   }
 
   public goLeft():void {
