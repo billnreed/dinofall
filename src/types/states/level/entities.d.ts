@@ -1,5 +1,5 @@
 import { Dinosaur } from "../../../entities/dinosaur";
 
-export interface GameStateEntities {
+export interface LevelStateEntities {
   dinosaur: Dinosaur
 }

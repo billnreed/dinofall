@@ -1,5 +1,5 @@
 import { DepthText } from '../../../gui/text/depth-text';
 
-export interface GameStateGui {
+export interface LevelStateGui {
   depthText: DepthText,
 }

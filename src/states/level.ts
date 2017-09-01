@@ -1,9 +1,9 @@
-import { GameStateEntities } from '../types/states/game/entities';
-import { GameStateSpawners } from '../types/states/game/spawners';
-import { GameStatePools } from '../types/states/game/pools';
-import { GameStateBoundaries } from '../types/states/game/boundaries';
-import { GameStateCounters } from '../types/states/game/counters';
-import { GameStateGui } from '../types/states/game/gui';
+import { LevelStateEntities } from '../types/states/level/entities';
+import { LevelStateSpawners } from '../types/states/level/spawners';
+import { LevelStatePools } from '../types/states/level/pools';
+import { LevelStateBoundaries } from '../types/states/level/boundaries';
+import { LevelStateCounters } from '../types/states/level/counters';
+import { LevelStateGui } from '../types/states/level/gui';
 
 import { FloorSpawner } from '../spawners/floor-spawner';
 import { FloorPool } from '../pools/floor-pool';
@@ -17,12 +17,12 @@ import { DepthText } from '../gui/text/depth-text';
 import { LevelStates } from '../state-machines/level-states';
 
 export class LevelState extends Phaser.State {
-  private counters: GameStateCounters;
-  private entities: GameStateEntities;
-  private spawners: GameStateSpawners;
-  private pools: GameStatePools;
-  private boundaries: GameStateBoundaries;
-  private gui: GameStateGui;
+  private counters: LevelStateCounters;
+  private entities: LevelStateEntities;
+  private spawners: LevelStateSpawners;
+  private pools: LevelStatePools;
+  private boundaries: LevelStateBoundaries;
+  private gui: LevelStateGui;
 
   private currentState: LevelStates;
 
@@ -81,7 +81,7 @@ export class LevelState extends Phaser.State {
     this.gui.depthText.updateDepthValue();
   }
 
-  private createCounters(): GameStateCounters {
+  private createCounters(): LevelStateCounters {
     const depth = new DepthCounter(this.game);
 
     return {
@@ -89,7 +89,7 @@ export class LevelState extends Phaser.State {
     };
   }
 
-  private createEntities(): GameStateEntities {
+  private createEntities(): LevelStateEntities {
     const dinosaur: Dinosaur = new Dinosaur(this.game);
 
     return {
@@ -97,7 +97,7 @@ export class LevelState extends Phaser.State {
     };
   }
 
-  private createPools(): GameStatePools {
+  private createPools(): LevelStatePools {
     const floorPool: FloorPool = new FloorPool(this.game);
     floorPool.createFloors();
 
@@ -106,7 +106,7 @@ export class LevelState extends Phaser.State {
     };
   }
 
-  private createSpawners(floorPool: FloorPool): GameStateSpawners {
+  private createSpawners(floorPool: FloorPool): LevelStateSpawners {
     const floorSpawner: FloorSpawner = new FloorSpawner(this.game, floorPool);
 
     return {
@@ -114,7 +114,7 @@ export class LevelState extends Phaser.State {
     };
   }
 
-  private createBoundaries(): GameStateBoundaries {
+  private createBoundaries(): LevelStateBoundaries {
     const left = new Boundary(this.game, Phaser.LEFT);
     const right = new Boundary(this.game, Phaser.RIGHT);
     const top = new Boundary(this.game, Phaser.UP);
@@ -128,7 +128,7 @@ export class LevelState extends Phaser.State {
     };
   }
 
-  private createGui(depthCounter: DepthCounter): GameStateGui {
+  private createGui(depthCounter: DepthCounter): LevelStateGui {
     const depthText = new DepthText(this.game, depthCounter);
 
     return {

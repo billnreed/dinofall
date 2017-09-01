@@ -1,5 +1,5 @@
 import { FloorPool } from "../../../pools/floor-pool";
 
-export interface GameStatePools {
+export interface LevelStatePools {
   floorPool: FloorPool,
 }

@@ -1,6 +1,6 @@
 import { Boundary } from "../../../entities/boundary";
 
-export interface GameStateBoundaries {
+export interface LevelStateBoundaries {
   left: Boundary,
   right: Boundary,
   top: Boundary,

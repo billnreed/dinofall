@@ -1,4 +1,4 @@
 import { DepthCounter } from '../../../gui/counters/depth-counter';
-export interface GameStateCounters {
+export interface LevelStateCounters {
   depth: DepthCounter,
 }
