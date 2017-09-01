@@ -1,3 +1,5 @@
+import { LevelCreator } from '../level/level-creator';
+
 import { LevelStateEntities } from '../level/types/level/entities';
 import { LevelStateSpawners } from '../level/types/level/spawners';
 import { LevelStatePools } from '../level/types/level/pools';
@@ -5,14 +7,7 @@ import { LevelStateBoundaries } from '../level/types/level/boundaries';
 import { LevelStateCounters } from '../level/types/level/counters';
 import { LevelStateGui } from '../level/types/level/gui';
 
-import { FloorSpawner } from '../level/spawners/floor-spawner';
-import { FloorPool } from '../level/pools/floor-pool';
 import { Floor } from '../level/entities/floor';
-import { Dinosaur } from '../level/entities/dinosaur';
-import { Boundary } from '../level/entities/boundary';
-
-import { DepthCounter } from '../level/gui/counters/depth-counter';
-import { DepthText } from '../level/gui/text/depth-text';
 
 import { LevelStates } from '../level/level-states';
 
@@ -37,12 +32,13 @@ export class LevelState extends Phaser.State {
   }
 
   public create(): void {
-    this.counters = this.createCounters();
-    this.entities = this.createEntities();
-    this.pools = this.createPools();
-    this.spawners = this.createSpawners(this.pools.floorPool);
-    this.boundaries = this.createBoundaries();
-    this.gui = this.createGui(this.counters.depth);
+    const levelCreator = new LevelCreator(this.game);
+    this.counters = levelCreator.createCounters();
+    this.entities = levelCreator.createEntities();
+    this.pools = levelCreator.createPools();
+    this.spawners = levelCreator.createSpawners(this.pools.floorPool);
+    this.boundaries = levelCreator.createBoundaries();
+    this.gui = levelCreator.createGui(this.counters.depth);
 
     this.enablePhysics();
 
@@ -79,61 +75,6 @@ export class LevelState extends Phaser.State {
     this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.right);
 
     this.gui.depthText.updateDepthValue();
-  }
-
-  private createCounters(): LevelStateCounters {
-    const depth = new DepthCounter(this.game);
-
-    return {
-      depth,
-    };
-  }
-
-  private createEntities(): LevelStateEntities {
-    const dinosaur: Dinosaur = new Dinosaur(this.game);
-
-    return {
-      dinosaur,
-    };
-  }
-
-  private createPools(): LevelStatePools {
-    const floorPool: FloorPool = new FloorPool(this.game);
-    floorPool.createFloors();
-
-    return {
-      floorPool,
-    };
-  }
-
-  private createSpawners(floorPool: FloorPool): LevelStateSpawners {
-    const floorSpawner: FloorSpawner = new FloorSpawner(this.game, floorPool);
-
-    return {
-      floorSpawner,
-    };
-  }
-
-  private createBoundaries(): LevelStateBoundaries {
-    const left = new Boundary(this.game, Phaser.LEFT);
-    const right = new Boundary(this.game, Phaser.RIGHT);
-    const top = new Boundary(this.game, Phaser.UP);
-    const bottom = new Boundary(this.game, Phaser.DOWN);
-
-    return {
-      left,
-      right,
-      top,
-      bottom,
-    };
-  }
-
-  private createGui(depthCounter: DepthCounter): LevelStateGui {
-    const depthText = new DepthText(this.game, depthCounter);
-
-    return {
-      depthText,
-    };
   }
 
   private enablePhysics(): void {
