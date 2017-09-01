@@ -174,6 +174,16 @@ export class LevelState extends Phaser.State {
   }
 
   private enableInput(): void {
+    this.input.keyboard.addCallbacks(this, (e: KeyboardEvent) => {
+      if (this.currentState === LevelStates.FALLING) {
+        if (e.keyCode === Phaser.Keyboard.A || e.keyCode === Phaser.Keyboard.LEFT) {
+          this.entities.dinosaur.goLeft();
+        } else if (e.keyCode === Phaser.Keyboard.D || e.keyCode === Phaser.Keyboard.RIGHT) {
+          this.entities.dinosaur.goRight();
+        }
+      }
+    });
+
     this.input.onDown.add(() => {
       if (this.currentState === LevelStates.FALLING) {
         if (this.input.activePointer.x < this.world.centerX) {
