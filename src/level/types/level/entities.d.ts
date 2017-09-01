@@ -1,4 +1,4 @@
-import { Dinosaur } from "../../../entities/dinosaur";
+import { Dinosaur } from "../../entities/dinosaur";
 
 export interface LevelStateEntities {
   dinosaur: Dinosaur

@@ -1,4 +1,4 @@
-import { FloorPool } from "../../../pools/floor-pool";
+import { FloorPool } from "../../pools/floor-pool";
 
 export interface LevelStatePools {
   floorPool: FloorPool,

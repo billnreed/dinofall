@@ -1,20 +1,20 @@
-import { LevelStateEntities } from '../types/states/level/entities';
-import { LevelStateSpawners } from '../types/states/level/spawners';
-import { LevelStatePools } from '../types/states/level/pools';
-import { LevelStateBoundaries } from '../types/states/level/boundaries';
-import { LevelStateCounters } from '../types/states/level/counters';
-import { LevelStateGui } from '../types/states/level/gui';
+import { LevelStateEntities } from '../level/types/level/entities';
+import { LevelStateSpawners } from '../level/types/level/spawners';
+import { LevelStatePools } from '../level/types/level/pools';
+import { LevelStateBoundaries } from '../level/types/level/boundaries';
+import { LevelStateCounters } from '../level/types/level/counters';
+import { LevelStateGui } from '../level/types/level/gui';
 
-import { FloorSpawner } from '../spawners/floor-spawner';
-import { FloorPool } from '../pools/floor-pool';
-import { Floor } from '../entities/floor';
-import { Dinosaur } from '../entities/dinosaur';
-import { Boundary } from '../entities/boundary';
+import { FloorSpawner } from '../level/spawners/floor-spawner';
+import { FloorPool } from '../level/pools/floor-pool';
+import { Floor } from '../level/entities/floor';
+import { Dinosaur } from '../level/entities/dinosaur';
+import { Boundary } from '../level/entities/boundary';
 
-import { DepthCounter } from '../gui/counters/depth-counter';
-import { DepthText } from '../gui/text/depth-text';
+import { DepthCounter } from '../level/gui/counters/depth-counter';
+import { DepthText } from '../level/gui/text/depth-text';
 
-import { LevelStates } from '../state-machines/level-states';
+import { LevelStates } from '../level/level-states';
 
 export class LevelState extends Phaser.State {
   private counters: LevelStateCounters;

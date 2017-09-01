@@ -1,4 +1,4 @@
-import { Boundary } from "../../../entities/boundary";
+import { Boundary } from "../../entities/boundary";
 
 export interface LevelStateBoundaries {
   left: Boundary,

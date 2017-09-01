@@ -1,7 +1,7 @@
 import { LevelConfig } from '../level-config';
-import { LevelStates } from '../state-machines/level-states';
+import { LevelStates } from '../level-states';
 
-import { DinosaurFrames } from '../types/entities/dinosaur/dinosaur-frames';
+import { DinosaurFrames } from '../types/dinosaur/dinosaur-frames';
 
 export class Dinosaur extends Phaser.Sprite {
 
