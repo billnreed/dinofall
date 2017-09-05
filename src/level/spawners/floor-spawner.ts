@@ -1,61 +1,35 @@
-import { LevelConfig } from '../level-config';
+// import { LevelConfig } from '../level-config';
+import { LevelStates } from '../level-states';
+import { LevelStateMachine } from '../level-state-machine';
 import { FloorPool } from '../pools/floor-pool';
+import { DepthCounter } from '../gui/counters/depth-counter';
 
 export class FloorSpawner {
-  public onSpawn: Phaser.Signal;
-
   private game: Phaser.Game;
+  private levelStateMachine: LevelStateMachine;
+
   private floorPool: FloorPool;
-  private spawnTimer: Phaser.Timer;
+  private depthCounter: DepthCounter;
 
-  constructor(game: Phaser.Game, floorPool: FloorPool) {
+  constructor(game: Phaser.Game, levelStateMachine: LevelStateMachine, floorPool: FloorPool, depthCounter: DepthCounter) {
     this.game = game;
+    this.levelStateMachine = levelStateMachine;
+
     this.floorPool = floorPool;
-
-    this.onSpawn = new Phaser.Signal();
-
-    this.spawnTimer = new Phaser.Timer(game, false);
-    game.time.add(this.spawnTimer);
+    this.depthCounter = depthCounter;
   }
 
-  public initPosition(): void {
-    const floor = this.floorPool.getFirstAvailable();
-
-    floor.reuse();
-    floor.startMovement();
+  public start(): void {
+    this.depthCounter.addDepthListener(1, this.spawnFloor, this);
+    this.depthCounter.addRecurringListener(20, this.spawnFloor, this);
   }
 
-  start(): void {
-    this.spawnTimer.loop(LevelConfig.spawners.floor.delay, () => {
+  private spawnFloor(): void {
+    console.log('spawn floor');
+    if (this.levelStateMachine.getCurrentState() === LevelStates.FALLING) {
       const floor = this.floorPool.getFirstAvailable();
 
       floor.reuse();
-      floor.startMovement();
-    }, this);
-    this.spawnTimer.start();
-  }
-
-  boost(boostDuration: number): void {
-    this.pause();
-
-    const originalFloorMoveSpeed = LevelConfig.entities.floor.moveSpeed;
-    const floorBoostSpeedTween = this.game.add.tween(LevelConfig.entities.floor);
-    floorBoostSpeedTween.to({
-      moveSpeed: originalFloorMoveSpeed * 4,
-    }, boostDuration);
-    floorBoostSpeedTween.onComplete.add(() => {
-      LevelConfig.entities.floor.moveSpeed = originalFloorMoveSpeed;
-      this.resume();
-    });
-
-    floorBoostSpeedTween.start();
-  }
-
-  pause(): void {
-    this.spawnTimer.pause();
-  }
-
-  resume(): void {
-    this.spawnTimer.resume();
+    }
   }
 }

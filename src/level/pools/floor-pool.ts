@@ -14,7 +14,7 @@ export class FloorPool extends Phaser.Group {
     }
 
     this.forEach((floor: Floor) => {
-      floor.onExitWorld.add(this.recycleFloor, this);
+      floor.onExitWorld.add(floor.recycle, floor);
     }, this);
   }
 
@@ -25,16 +25,12 @@ export class FloorPool extends Phaser.Group {
     }, this);
   }
 
-  private recycleFloor(floor: Floor): void {
-    floor.recycle();
-  }
-
   public getFirstAvailable(): Floor {
-    const notExistingFloors = this.filter((floor: Floor) => floor.doesNotExist(), false);
-    if (notExistingFloors.total === 0) {
-      throw 'All floors exist, therefore they are all being used';
+    const availableFloors = this.filter((floor: Floor) => floor.isAvailable(), false);
+    if (availableFloors.total === 0) {
+      throw 'All floors are unavailable, therefore they are all being used';
     } else {
-      return notExistingFloors.first;
+      return availableFloors.first;
     }
   }
 }

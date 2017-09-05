@@ -1,3 +1,5 @@
+import { LevelStateMachine } from './level-state-machine';
+
 import { LevelStateCounters } from '../level/types/level/counters';
 import { LevelStateEntities } from '../level/types/level/entities';
 import { LevelStatePools } from '../level/types/level/pools';
@@ -14,9 +16,11 @@ import { DepthText } from '../level/gui/text/depth-text';
 
 export class LevelCreator {
   private game: Phaser.Game;
+  private levelStateMachine: LevelStateMachine;
 
-  constructor(game: Phaser.Game) {
+  constructor(game: Phaser.Game, levelStateMachine: LevelStateMachine) {
     this.game = game;
+    this.levelStateMachine = levelStateMachine;
   }
 
   public createCounters(): LevelStateCounters {
@@ -28,7 +32,7 @@ export class LevelCreator {
   }
 
   public createEntities(): LevelStateEntities {
-    const dinosaur: Dinosaur = new Dinosaur(this.game);
+    const dinosaur: Dinosaur = new Dinosaur(this.game, this.levelStateMachine);
 
     return {
       dinosaur,
@@ -44,8 +48,8 @@ export class LevelCreator {
     };
   }
 
-  public createSpawners(floorPool: FloorPool): LevelStateSpawners {
-    const floorSpawner: FloorSpawner = new FloorSpawner(this.game, floorPool);
+  public createSpawners(floorPool: FloorPool, depthCounter: DepthCounter): LevelStateSpawners {
+    const floorSpawner: FloorSpawner = new FloorSpawner(this.game, this.levelStateMachine, floorPool, depthCounter);
 
     return {
       floorSpawner,

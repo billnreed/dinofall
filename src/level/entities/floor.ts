@@ -8,24 +8,25 @@ export class Floor extends Phaser.Group {
   public onExitWorld: Phaser.Signal;
   public body: Phaser.Physics.Arcade.Body;
 
-  private isMoving: boolean;
+  private isActive: boolean;
 
   constructor(game: Phaser.Game) {
     super(game);
 
     this.onExitWorld = new Phaser.Signal();
-    this.isMoving = false;
 
     const necessaryTiles = Math.ceil(this.game.width / Floor.TILE_WIDTH);
     this.createMultiple(necessaryTiles, 'ground', 0, true);
     this.align(-1, 1, 64, 64);
 
-    this.setAll('exists', false);
+    this.isActive = false;
   }
 
   public update(): void {
-    if (this.isMoving) {
-      this.setAll('body.velocity.y', -1 * LevelConfig.entities.floor.moveSpeed);
+    if (this.isActive) {
+      this.children.forEach((floorTile: Phaser.Sprite) => {
+        floorTile.body.velocity.y = -1 * LevelConfig.speed;
+      });
     }
 
     if (this.bottom < 0) {
@@ -35,26 +36,29 @@ export class Floor extends Phaser.Group {
 
   public initPhysics(): void {
     this.setAll('body.immovable', true);
-  }
-
-  public startMovement(): void {
-    this.isMoving = true;
+    this.recycle();
   }
 
   public recycle(): void {
-    this.setAll('exists', false);
+    this.isActive = false;
+
+    this.setAll('visible', false);
+
+    this.setAll('body.velocity.y', 0);
   }
 
   public reuse(): void {
-    this.setAll('exists', true);
-    this.setRandomGap();
+    this.isActive = true;
 
-    this.setAll('y', 0);
+    this.setAll('visible', true);
+    this.align(-1, 1, 64, 64);
     this.y = this.game.world.height;
+
+    this.setRandomGap();
   }
 
-  public doesNotExist(): boolean {
-    return this.checkAll('exists', false);
+  public isAvailable(): boolean {
+    return !this.isActive;
   }
 
   private setRandomGap(): void {
@@ -65,10 +69,10 @@ export class Floor extends Phaser.Group {
     const startIndex = Math.floor((this.game.world.width * start) / Floor.TILE_WIDTH);
     const endIndex = Math.floor((this.game.world.width * end) / Floor.TILE_WIDTH);
 
-    this.filter((floorTile: Phaser.Sprite, index: number) => {
+    this.children.forEach((floorTile: Phaser.Sprite, index: number) => {
       if (index >= startIndex && index <= endIndex) {
+        floorTile;
         floorTile.visible = false;
-        floorTile.exists = false;
       }
     });
   }

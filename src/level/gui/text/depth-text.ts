@@ -10,6 +10,6 @@ export class DepthText extends Phaser.BitmapText {
   }
 
   updateDepthValue(): void {
-    this.text = `Depth: ${this.depthCounter.getDepth()}`;
+    this.text = `Depth: ${this.depthCounter.depth}`;
   }
 }

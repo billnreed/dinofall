@@ -1,4 +1,6 @@
 import { LevelCreator } from '../level/level-creator';
+import { LevelStates } from '../level/level-states';
+import { LevelStateMachine } from '../level/level-state-machine';
 
 import { LevelStateEntities } from '../level/types/level/entities';
 import { LevelStateSpawners } from '../level/types/level/spawners';
@@ -9,8 +11,6 @@ import { LevelStateGui } from '../level/types/level/gui';
 
 import { Floor } from '../level/entities/floor';
 
-import { LevelStates } from '../level/level-states';
-
 export class LevelState extends Phaser.State {
   private counters: LevelStateCounters;
   private entities: LevelStateEntities;
@@ -19,10 +19,11 @@ export class LevelState extends Phaser.State {
   private boundaries: LevelStateBoundaries;
   private gui: LevelStateGui;
 
-  private currentState: LevelStates;
+  private stateMachine: LevelStateMachine;
 
   public init(): void {
-    this.currentState = LevelStates.FALLING;
+    this.stateMachine = new LevelStateMachine();
+    this.stateMachine.transitionTo(LevelStates.FALLING);
   }
 
   public preload(): void {
@@ -32,11 +33,11 @@ export class LevelState extends Phaser.State {
   }
 
   public create(): void {
-    const levelCreator = new LevelCreator(this.game);
+    const levelCreator = new LevelCreator(this.game, this.stateMachine);
     this.counters = levelCreator.createCounters();
     this.entities = levelCreator.createEntities();
     this.pools = levelCreator.createPools();
-    this.spawners = levelCreator.createSpawners(this.pools.floorPool);
+    this.spawners = levelCreator.createSpawners(this.pools.floorPool, this.counters.depth);
     this.boundaries = levelCreator.createBoundaries();
     this.gui = levelCreator.createGui(this.counters.depth);
 
@@ -49,21 +50,23 @@ export class LevelState extends Phaser.State {
 
     this.enableInput();
 
+    this.addDepthListeners();
+
     this.start();
   }
 
   public update(): void {
-    if (this.currentState === LevelStates.FALLING) {
+    if (this.stateMachine.getCurrentState() === LevelStates.FALLING) {
       this.pools.floorPool.forEach((floor: Floor) => {
         this.physics.arcade.collide(floor, this.entities.dinosaur);
       }, null);
 
       this.physics.arcade.overlap(this.entities.dinosaur, this.boundaries.bottom, () => {
-        this.currentState = LevelStates.BOOSTING;
+        this.stateMachine.transitionTo(LevelStates.BOOSTING);
         const boostDuration = 2000;
 
-        this.entities.dinosaur.boost(boostDuration, () => { this.currentState = LevelStates.FALLING; });
-        this.spawners.floorSpawner.boost(boostDuration);
+        this.entities.dinosaur.boost(boostDuration, () => { this.stateMachine.transitionTo(LevelStates.FALLING); }, this);
+        this.counters.depth.boost(boostDuration);
       });
 
       this.physics.arcade.collide(this.entities.dinosaur, this.boundaries.top, () => {
@@ -104,8 +107,6 @@ export class LevelState extends Phaser.State {
   }
 
   private positionEntities(): void {
-    this.spawners.floorSpawner.initPosition();
-
     this.entities.dinosaur.centerX = this.world.width - 200;
     this.entities.dinosaur.centerY = this.world.centerY - 200;
   }
@@ -116,7 +117,7 @@ export class LevelState extends Phaser.State {
 
   private enableInput(): void {
     this.input.keyboard.addCallbacks(this, (e: KeyboardEvent) => {
-      if (this.currentState === LevelStates.FALLING) {
+      if (this.stateMachine.getCurrentState() === LevelStates.FALLING) {
         if (e.keyCode === Phaser.Keyboard.A || e.keyCode === Phaser.Keyboard.LEFT) {
           this.entities.dinosaur.goLeft();
         } else if (e.keyCode === Phaser.Keyboard.D || e.keyCode === Phaser.Keyboard.RIGHT) {
@@ -126,7 +127,7 @@ export class LevelState extends Phaser.State {
     });
 
     this.input.onDown.add(() => {
-      if (this.currentState === LevelStates.FALLING) {
+      if (this.stateMachine.getCurrentState() === LevelStates.FALLING) {
         if (this.input.activePointer.x < this.world.centerX) {
           this.entities.dinosaur.goLeft();
         } else {
@@ -134,6 +135,11 @@ export class LevelState extends Phaser.State {
         }
       }
     });
+  }
+
+  private addDepthListeners(): void {
+    // this.counters.depth.addDepthListener(50, () => { LevelConfig.counters.depth.delay /= 1.5; });
+    // this.counters.depth.addDepthListener(200, () => { LevelConfig.counters.depth.delay /= 1.5; });
   }
 
   private start(): void {

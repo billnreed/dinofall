@@ -1,12 +1,10 @@
 export const LevelConfig = {
+  speed: 400,
   entities: {
     dinosaur: {
-      moveSpeed: 400,
+      moveSpeed: 800,
       fallSpeed: 500,
     },
-    floor: {
-      moveSpeed: 400,
-    }
   },
   pools: {
     floor: {

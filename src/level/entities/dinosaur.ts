@@ -1,5 +1,6 @@
 import { LevelConfig } from '../level-config';
 import { LevelStates } from '../level-states';
+import { LevelStateMachine } from '../level-state-machine';
 
 import { DinosaurFrames } from '../types/dinosaur/dinosaur-frames';
 
@@ -11,21 +12,21 @@ export class Dinosaur extends Phaser.Sprite {
   };
 
   private direction: number;
-  private currentState: LevelStates;
+  private levelStateMachine: LevelStateMachine;
 
-  constructor(game: Phaser.Game) {
+  constructor(game: Phaser.Game, levelStateMachine: LevelStateMachine) {
     super(game, 0, 0, 'dinosaur');
+
+    this.levelStateMachine = levelStateMachine;
 
     this.anchor.setTo(0.5, 0.5);
     this.scale.setTo(2, 2);
     this.height = 128;
     this.width = 93;
-
-    this.currentState = LevelStates.FALLING;
   }
 
   public update(): void {
-    switch(this.currentState) {
+    switch(this.levelStateMachine.getCurrentState()) {
       case LevelStates.FALLING:
         this.updateFalling();
         break;
@@ -51,17 +52,14 @@ export class Dinosaur extends Phaser.Sprite {
     this.body.velocity.y = 0;
   }
 
-  public boost(boostDuration: number, onFinishBoost: () => void): void {
-    this.currentState = LevelStates.BOOSTING;
-
+  public boost(boostDuration: number, onFinishBoost: () => void, onFinishContext?: any): void {
     const dinoBoostPositionTween = this.game.add.tween(this);
     dinoBoostPositionTween.to({
       x: this.x,
       y: 150,
     }, boostDuration);
     dinoBoostPositionTween.onComplete.add(() => {
-      this.currentState = LevelStates.FALLING;
-      onFinishBoost.call(null);
+      onFinishBoost.call(onFinishContext);
     });
 
     const dinoBoostScaleTween = this.game.add.tween(this.scale);
