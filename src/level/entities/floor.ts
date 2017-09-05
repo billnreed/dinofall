@@ -25,7 +25,7 @@ export class Floor extends Phaser.Group {
   public update(): void {
     if (this.isActive) {
       this.children.forEach((floorTile: Phaser.Sprite) => {
-        floorTile.body.velocity.y = -1 * LevelConfig.speed;
+        floorTile.body.velocity.y = -1 * LevelConfig.counters.depth.delay * LevelConfig.counters.depth.speedFactor;
       });
     }
 
@@ -43,6 +43,7 @@ export class Floor extends Phaser.Group {
     this.isActive = false;
 
     this.setAll('visible', false);
+    this.setAll('body.enable', false);
 
     this.setAll('body.velocity.y', 0);
   }
@@ -51,6 +52,7 @@ export class Floor extends Phaser.Group {
     this.isActive = true;
 
     this.setAll('visible', true);
+    this.setAll('body.enable', true);
     this.align(-1, 1, 64, 64);
     this.y = this.game.world.height;
 
@@ -71,8 +73,8 @@ export class Floor extends Phaser.Group {
 
     this.children.forEach((floorTile: Phaser.Sprite, index: number) => {
       if (index >= startIndex && index <= endIndex) {
-        floorTile;
         floorTile.visible = false;
+        floorTile.body.enable = false;
       }
     });
   }

@@ -44,14 +44,19 @@ export class DepthCounter {
   }
 
   public boost(duration: number) {
-    const originalSpeed = LevelConfig.speed;
-    const levelSpeedTween = this.game.add.tween(LevelConfig);
+    const originalDepthDelay = LevelConfig.counters.depth.delay;
+    const originalSpeedFactor = LevelConfig.counters.depth.speedFactor;
+
+    const levelSpeedTween = this.game.add.tween(LevelConfig.counters.depth);
     levelSpeedTween.to({
-      speed: originalSpeed * 4,
+      delay: originalDepthDelay / 4,
+      speedFactor: originalSpeedFactor * 4,
     }, duration);
     levelSpeedTween.onComplete.add(() => {
-      LevelConfig.speed = originalSpeed;
+      LevelConfig.counters.depth.delay = originalDepthDelay;
+      LevelConfig.counters.depth.speedFactor = originalSpeedFactor;
     });
+
     levelSpeedTween.start();
   }
 

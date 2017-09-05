@@ -25,7 +25,6 @@ export class FloorSpawner {
   }
 
   private spawnFloor(): void {
-    console.log('spawn floor');
     if (this.levelStateMachine.getCurrentState() === LevelStates.FALLING) {
       const floor = this.floorPool.getFirstAvailable();
 

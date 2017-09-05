@@ -1,5 +1,4 @@
 export const LevelConfig = {
-  speed: 400,
   entities: {
     dinosaur: {
       moveSpeed: 800,
@@ -11,14 +10,10 @@ export const LevelConfig = {
       size: 10,
     }
   },
-  spawners: {
-    floor: {
-      delay: 1500,
-    }
-  },
   counters: {
     depth: {
       delay: 75,
+      speedFactor: 6,
     }
   }
 };
